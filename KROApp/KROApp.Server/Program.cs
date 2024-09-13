@@ -1,3 +1,7 @@
+using KROApp.Server.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<KroContext>(options =>
+  options.UseSqlServer(builder.Configuration.GetConnectionString("KroDatabase") ?? throw new InvalidOperationException("Connection string 'KroDatabase' not found.")));
+builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<KroContext>();
 
 var app = builder.Build();
 
@@ -22,6 +31,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 
