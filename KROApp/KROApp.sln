@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KROApp.Server", "KROApp.Server\KROApp.Server.csproj", "{EA568976-807C-417D-9CFF-16D955156E0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KroApp.Server", "KROApp.Server\KroApp.Server.csproj", "{EA568976-807C-417D-9CFF-16D955156E0A}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "kroapp.client", "kroapp.client\kroapp.client.esproj", "{92024D0A-6BE5-4439-BBFD-F5C07A336DC3}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "KroApp.client", "kroapp.client\KroApp.client.esproj", "{92024D0A-6BE5-4439-BBFD-F5C07A336DC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KroApp.Tests", "KroApp.Tests\KroApp.Tests.csproj", "{5E754858-8EB0-4723-AB3E-9ADA3F90E7BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{92024D0A-6BE5-4439-BBFD-F5C07A336DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92024D0A-6BE5-4439-BBFD-F5C07A336DC3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92024D0A-6BE5-4439-BBFD-F5C07A336DC3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5E754858-8EB0-4723-AB3E-9ADA3F90E7BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E754858-8EB0-4723-AB3E-9ADA3F90E7BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E754858-8EB0-4723-AB3E-9ADA3F90E7BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E754858-8EB0-4723-AB3E-9ADA3F90E7BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
