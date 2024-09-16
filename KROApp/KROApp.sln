@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KroApp.Server", "KROApp.Ser
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "KroApp.client", "kroapp.client\KroApp.client.esproj", "{92024D0A-6BE5-4439-BBFD-F5C07A336DC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KroApp.Tests", "KroApp.Tests\KroApp.Tests.csproj", "{5E754858-8EB0-4723-AB3E-9ADA3F90E7BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KroApp.Tests", "KroApp.Tests\KroApp.Tests.csproj", "{5E754858-8EB0-4723-AB3E-9ADA3F90E7BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
