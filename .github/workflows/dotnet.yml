@@ -23,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore KroApp/KroApp.sln
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build KroApp/KroApp.sln --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test KroApp/KroApp.sln --no-build --verbosity normal
