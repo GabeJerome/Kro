@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace KROApp.Server.Migrations
+namespace KroApp.Server.Migrations
 {
     /// <inheritdoc />
     public partial class Initialize : Migration
