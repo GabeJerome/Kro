@@ -1,4 +1,4 @@
-using KROApp.Server.Models;
+using KroApp.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

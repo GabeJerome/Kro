@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace KROApp.Server.Models
+namespace KroApp.Server.Models
 {
   public class User : IdentityUser
   {
-    
+
   }
 }

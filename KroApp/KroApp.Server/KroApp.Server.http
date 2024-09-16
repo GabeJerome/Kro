@@ -1,0 +1,6 @@
+@KroApp.Server_HostAddress = http://localhost:5204
+
+GET {{KroApp.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
