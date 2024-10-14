@@ -31,7 +31,7 @@ export default [
       "eslint-comments": pluginEslintComments,
     },
     rules: {
-      "prettier/prettier": ["error", { tabWidth: 2 }],
+      "prettier/prettier": ["error", { tabWidth: 2, endOfLine: "crlf" }],
       indent: ["error", 2],
       "vue/multi-word-component-names": "off",
       "unicorn/prevent-abbreviations": "error",
@@ -47,3 +47,4 @@ export default [
     },
   },
 ];
+
