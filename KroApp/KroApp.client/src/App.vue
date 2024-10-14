@@ -1,15 +1,8 @@
 <template>
-  <header>
-    
-  </header>
-
-  <main>
-
-  </main>
+  <main>Welcome to Kro</main>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 header {
@@ -17,16 +10,5 @@ header {
 }
 
 @media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
 }
 </style>
