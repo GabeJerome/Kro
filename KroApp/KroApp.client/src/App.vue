@@ -1,14 +1,35 @@
 <template>
-  <main>Welcome to Kro</main>
+  <main>
+    <div>
+      <div>Welcome to Kro</div>
+      <div class="card">
+        <span>
+          <InputText
+            v-model="value"
+            type="text"
+          />
+          <Button label="Save" />
+        </span>
+        <span>{{ text }}</span>
+      </div>
+    </div>
+    <Button
+      label="Toggle Dark Mode"
+      @click="toggleDarkMode"
+    />
+  </main>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import InputText from "primevue/inputtext";
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+import Button from "primevue/button";
+import { ref } from "vue";
+const text = ref("");
 
-@media (min-width: 1024px) {
+function toggleDarkMode() {
+  document.documentElement.classList.toggle("dark-mode");
 }
-</style>
+</script>
+
+<style scoped></style>
