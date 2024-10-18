@@ -38,6 +38,16 @@ export default [
       "promise/always-return": "warn",
       "security/detect-object-injection": "off",
       "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+      "vue/max-attributes-per-line": [
+        "error",
+        {
+          singleline: 1,
+          multiline: {
+            max: 1,
+            allowFirstLine: false,
+          },
+        },
+      ],
     },
   },
   {
@@ -47,4 +57,3 @@ export default [
     },
   },
 ];
-

@@ -1,0 +1,9 @@
+:root {
+  --body-bg: var(--p-surface-50);
+  --card-bg: var(--p-surface-300);
+}
+
+:root[class="dark-mode"] {
+  --body-bg: var(--p-surface-900);
+  --card-bg: var(--p-surface-500);
+}
