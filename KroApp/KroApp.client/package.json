@@ -10,7 +10,17 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --check src",
+    "format:fix": "prettier --write src",
+    "fix": "prettier --write src && eslint src --fix",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@primevue/themes": "^4.1.0",
@@ -35,6 +45,8 @@
     "eslint-plugin-unicorn": "^55.0.0",
     "eslint-plugin-vue": "^9.28.0",
     "globals": "^15.9.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "npm-run-all2": "^6.2.0",
     "prettier": "^3.3.3",
     "typescript": "~5.4.0",
@@ -43,3 +55,4 @@
     "vue-tsc": "^2.0.21"
   }
 }
+

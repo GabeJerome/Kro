@@ -31,23 +31,24 @@ export default [
       "eslint-comments": pluginEslintComments,
     },
     rules: {
-      "prettier/prettier": ["error", { tabWidth: 2, endOfLine: "crlf" }],
+      "prettier/prettier": ["error", { tabWidth: 2, endOfLine: "crlf", singleAttributePerLine: true }],
+      "vue/max-attributes-per-line": [
+        "error",
+        {
+          singleline: {
+            max: 1,
+          },
+          multiline: {
+            max: 1,
+          },
+        },
+      ],
       indent: ["error", 2],
       "vue/multi-word-component-names": "off",
       "unicorn/prevent-abbreviations": "error",
       "promise/always-return": "warn",
       "security/detect-object-injection": "off",
       "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-      "vue/max-attributes-per-line": [
-        "error",
-        {
-          singleline: 1,
-          multiline: {
-            max: 1,
-            allowFirstLine: false,
-          },
-        },
-      ],
     },
   },
   {
@@ -57,3 +58,4 @@ export default [
     },
   },
 ];
+
