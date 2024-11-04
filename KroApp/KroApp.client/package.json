@@ -11,14 +11,10 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "format": "prettier --check src",
-    "format:fix": "prettier --write src",
-    "fix": "prettier --write src && eslint src --fix",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,ts,vue}": [
-      "prettier --write",
       "eslint --fix"
     ]
   },
@@ -55,4 +51,3 @@
     "vue-tsc": "^2.0.21"
   }
 }
-
