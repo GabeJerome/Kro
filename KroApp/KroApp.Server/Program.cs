@@ -1,6 +1,8 @@
 using KroApp.Server.Models;
+using KroApp.Server.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
