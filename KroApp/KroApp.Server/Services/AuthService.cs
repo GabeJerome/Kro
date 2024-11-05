@@ -7,26 +7,41 @@ namespace KroApp.Server.Services
 {
   public class AuthService : IAuthService
   {
+    private readonly IConfiguration _configuration;
+
+    public AuthService(IConfiguration configuration)
+    {
+      _configuration = configuration;
+    }
+
     public string GenerateJwtToken(string email)
     {
       var claims = new[]
       {
         new Claim(JwtRegisteredClaimNames.Sub, email),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-      };
+    };
 
-      var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TODO"));
+      // Retrieve the secret key from configuration and check for null
+      var jwtKey = _configuration["Jwt:Key"];
+      if (string.IsNullOrEmpty(jwtKey))
+      {
+        throw new InvalidOperationException("JWT Key is not configured. Please check your user secrets.");
+      }
+
+      var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
       var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
       var token = new JwtSecurityToken(
-        issuer: "Kro.com",
-        audience: "Kro.com",
-        claims: claims,
-        expires: DateTime.Now.AddMinutes(30),
-        signingCredentials: creds
+          issuer: "Kro.com",
+          audience: "Kro.com",
+          claims: claims,
+          expires: DateTime.Now.AddHours(4),
+          signingCredentials: creds
       );
 
       return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
   }
 }

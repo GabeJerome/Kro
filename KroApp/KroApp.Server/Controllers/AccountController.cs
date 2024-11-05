@@ -9,11 +9,11 @@ namespace KroApp.Server.Controllers
   [Route("api/[controller]")]
   public class AccountController : ControllerBase
   {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
     private readonly IAuthService _authService;
 
-    public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IAuthService authService)
+    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IAuthService authService)
     {
       _userManager = userManager;
       _signInManager = signInManager;

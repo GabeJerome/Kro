@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KroApp.Server.Models
 {
-    public class KroContext(DbContextOptions<KroContext> options) : IdentityDbContext<User>(options)
+  public class KroContext : IdentityDbContext<User>
   {
-    
+    public KroContext(DbContextOptions<KroContext> options) : base(options) { }
+
   }
 }

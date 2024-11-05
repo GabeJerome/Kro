@@ -8,32 +8,37 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using KroApp.Server.Services;
+using Microsoft.Extensions.Configuration;
 
 public class AccountControllerTests
 {
-  private readonly Mock<UserManager<IdentityUser>> _userManagerMock;
-  private readonly Mock<SignInManager<IdentityUser>> _signInManagerMock;
-  private readonly IAuthService _authService;
+  private readonly Mock<UserManager<User>> _userManagerMock;
+  private readonly Mock<SignInManager<User>> _signInManagerMock;
+  private readonly IAuthService _authServiceMock;
+  private readonly Mock<IConfiguration> _configurationMock;
   private readonly AccountController _controller;
 
   public AccountControllerTests()
   {
-    var userStoreMock = new Mock<IUserStore<IdentityUser>>();
-    _userManagerMock = new Mock<UserManager<IdentityUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+    var userStoreMock = new Mock<IUserStore<User>>();
+    _userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-    _signInManagerMock = new Mock<SignInManager<IdentityUser>>(
+    _signInManagerMock = new Mock<SignInManager<User>>(
         _userManagerMock.Object,
         httpContextAccessorMock.Object,
-        Mock.Of<IUserClaimsPrincipalFactory<IdentityUser>>(),
+        Mock.Of<IUserClaimsPrincipalFactory<User>>(),
         null,
-        Mock.Of<ILogger<SignInManager<IdentityUser>>>(),
+        Mock.Of<ILogger<SignInManager<User>>>(),
         Mock.Of<IAuthenticationSchemeProvider>(),
-        Mock.Of<IUserConfirmation<IdentityUser>>());
+        Mock.Of<IUserConfirmation<User>>());
 
-    _authService = new AuthService();
+    _configurationMock = new Mock<IConfiguration>();
+    _configurationMock.Setup(c => c["Jwt:Key"]).Returns("123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()=+");
 
-    _controller = new AccountController(_userManagerMock.Object, _signInManagerMock.Object, _authService);
+    _authServiceMock = new AuthService(_configurationMock.Object);
+
+    _controller = new AccountController(_userManagerMock.Object, _signInManagerMock.Object, _authServiceMock);
   }
 
   private UserRegister ValidRegisterModel()
@@ -62,7 +67,7 @@ public class AccountControllerTests
   {
     // Arrange
     var registerModel = ValidRegisterModel();
-    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<IdentityUser>(), registerModel.Password))
+    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), registerModel.Password))
                     .ReturnsAsync(IdentityResult.Success);
 
     // Act
@@ -77,10 +82,10 @@ public class AccountControllerTests
   {
     // Arrange
     var registerModel = ValidRegisterModel();
-    var existingUser = new IdentityUser { UserName = registerModel.Email, Email = registerModel.Email };
+    var existingUser = new User { UserName = registerModel.Email, Email = registerModel.Email };
     _userManagerMock.Setup(um => um.FindByEmailAsync(registerModel.Email))
                     .ReturnsAsync(existingUser);
-    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<IdentityUser>(), registerModel.Password))
+    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), registerModel.Password))
                     .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "User already exists" }));
 
     // Act
@@ -98,7 +103,7 @@ public class AccountControllerTests
     // Arrange
     var registerModel = ValidRegisterModel();
     registerModel.Password = "123"; // Weak password
-    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<IdentityUser>(), registerModel.Password))
+    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), registerModel.Password))
                     .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Password is too weak" }));
 
     // Act
