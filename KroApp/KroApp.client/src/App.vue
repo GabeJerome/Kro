@@ -1,18 +1,6 @@
 <template>
   <main>
-    <div>
-      <div>Welcome to Kro</div>
-      <div class="card">
-        <span>
-          <InputText
-            v-model="value"
-            type="text"
-          />
-          <Button label="Save" />
-        </span>
-        <span>{{ text }}</span>
-      </div>
-    </div>
+    <LoginRegister />
     <Button
       label="Toggle Dark Mode"
       @click="toggleDarkMode"
@@ -21,11 +9,8 @@
 </template>
 
 <script setup lang="ts">
-import InputText from "primevue/inputtext";
-
 import Button from "primevue/button";
-import { ref } from "vue";
-const text = ref("");
+import LoginRegister from "@/views/LoginRegister.vue";
 
 function toggleDarkMode() {
   document.documentElement.classList.toggle("dark-mode");

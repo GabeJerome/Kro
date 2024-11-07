@@ -19,9 +19,13 @@
     ]
   },
   "dependencies": {
+    "@primevue/forms": "^4.2.1",
     "@primevue/themes": "^4.1.0",
-    "primevue": "^4.1.0",
-    "vue": "^3.4.29"
+    "axios": "^1.7.7",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.1",
+    "vue": "^3.4.29",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
