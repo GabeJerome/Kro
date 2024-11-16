@@ -15,6 +15,7 @@
             <FloatLabel variant="on">
               <InputText
                 id="email-input"
+                v-model="email"
                 name="email"
                 class="p-mb-3"
                 fluid
@@ -35,6 +36,7 @@
             <FloatLabel variant="on">
               <Password
                 id="password-input"
+                v-model="password"
                 name="password"
                 class="p-mb-3"
                 type="password"
@@ -52,14 +54,24 @@
               {{ ($form as any).password.error?.message }}
             </Message>
           </FormField>
+          <FormField v-if="isLogin">
+            <Checkbox
+              id="remember-me"
+              v-model="rememberMe"
+              name="rememberMe"
+              value="Remember Me"
+            />
+            <label for="ingredient2"> Remember Me? </label>
+          </FormField>
           <FormField
-            v-if="!isLogin"
+            v-else
             class="form-field"
           >
             <FloatLabel variant="on">
               <Password
                 v-if="!isLogin"
                 id="confirm-password-input"
+                v-model="confirmPassword"
                 name="confirmPassword"
                 class="p-mb-3"
                 type="password"
@@ -78,6 +90,7 @@
               {{ ($form as any).confirmPassword.error?.message }}
             </Message>
           </FormField>
+
           <label for="toggle-login-register">{{
             isLogin ? "Don't have an account?" : "Already have an account?"
           }}</label>
@@ -109,8 +122,17 @@ import {
   FloatLabel,
 } from "primevue";
 import { Form, FormField } from "@primevue/forms";
+import Checkbox from "primevue/checkbox";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
+import auth from "@/api/auth";
+import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+const rememberMe = ref(false);
 
 const resolver = ref(
   zodResolver(
@@ -133,9 +155,9 @@ const resolver = ref(
 const onFormSubmit = (form: any) => {
   if (form.valid) {
     if (isLogin.value) {
-      console.log("Data is valid! Logging in...");
+      handleLogin();
     } else {
-      console.log("Data is valid! Registering...");
+      handleRegister();
     }
   } else {
     console.log("Data is not valid");
@@ -146,6 +168,45 @@ const isLogin = ref(true);
 
 function toggleAuthMode() {
   isLogin.value = !isLogin.value;
+}
+
+async function handleLogin() {
+  const response = await auth.loginUser({
+    email: email.value,
+    password: password.value,
+  });
+
+  console.log("Login response:", response);
+
+  if (response?.Token) {
+    auth.saveToken(response.Token);
+    toast.add({
+      severity: "success",
+      summary: "Login successful",
+      detail: "You are now logged in.",
+      life: 3000,
+    });
+  }
+}
+
+async function handleRegister() {
+  const response = await auth.registerUser({
+    email: email.value,
+    password: password.value,
+    confirmPassword: confirmPassword.value,
+  });
+
+  console.log("Register response:", response);
+
+  if (response?.Token) {
+    auth.saveToken(response.Token);
+    toast.add({
+      severity: "success",
+      summary: "Registration successful",
+      detail: "Your account has been created.",
+      life: 3000,
+    });
+  }
 }
 </script>
 

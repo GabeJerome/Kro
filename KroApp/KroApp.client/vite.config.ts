@@ -11,12 +11,14 @@ const baseFolder =
     ? `${process.env.APPDATA}/ASP.NET/https`
     : `${process.env.HOME}/.aspnet/https`;
 
-const certificateArg = process.argv.map((arg) => arg.match(/--name=(?<value>.+)/i)).filter(Boolean)[0];
+const certificateArg = process.argv
+  .map((arg) => arg.match(/--name=(?<value>.+)/i))
+  .filter(Boolean)[0];
 const certificateName = certificateArg?.groups?.value || "KroApp.client";
 
 if (!certificateName) {
   console.error(
-    "Invalid certificate name. Run this script in the context of an npm/yarn script or pass --name=<<app>> explicitly."
+    "Invalid certificate name. Run this script in the context of an npm/yarn script or pass --name=<<app>> explicitly.",
   );
   process.exit(-1);
 }
@@ -29,8 +31,16 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
     0 !==
     child_process.spawnSync(
       "dotnet",
-      ["dev-certs", "https", "--export-path", certFilePath, "--format", "Pem", "--no-password"],
-      { stdio: "inherit" }
+      [
+        "dev-certs",
+        "https",
+        "--export-path",
+        certFilePath,
+        "--format",
+        "Pem",
+        "--no-password",
+      ],
+      { stdio: "inherit" },
     ).status
   ) {
     throw new Error("Could not create certificate.");
@@ -45,5 +55,14 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  server: {},
+  server: {
+    port: 5173,
+    proxy: {
+      "/api": {
+        target: "http://localhost:7178",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });

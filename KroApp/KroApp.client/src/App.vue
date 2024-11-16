@@ -1,5 +1,6 @@
 <template>
   <main class="tablet-width mobile-medium-width mobile-full-width">
+    <Toast />
     <LoginRegister />
     <Button
       label="Toggle Dark Mode"
@@ -12,6 +13,7 @@
 import Button from "primevue/button";
 import LoginRegister from "@/views/LoginRegister.vue";
 import { onMounted } from "vue";
+import { Toast } from "primevue";
 
 function toggleDarkMode() {
   const isDarkMode = document.documentElement.classList.toggle("dark-mode");

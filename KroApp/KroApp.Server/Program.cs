@@ -18,6 +18,23 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<KroContext>()
     .AddDefaultTokenProviders();
 
+var frontendUrl = builder.Configuration["FrontendUrl"];
+if (string.IsNullOrEmpty(frontendUrl))
+{
+  throw new InvalidOperationException("FrontendUrl must be configured in the app settings.");
+}
+
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy("AllowFrontend", policy =>
+  {
+    policy.WithOrigins(frontendUrl)
+          .AllowAnyHeader()
+          .AllowAnyMethod()
+          .AllowCredentials();
+  });
+});
+
 // Register other services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllers();
@@ -51,6 +68,8 @@ builder.Services.AddAuthentication(x =>
 });
 
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
