@@ -1,9 +1,16 @@
 :root {
-  --body-bg: var(--p-surface-50);
-  --card-bg: var(--p-surface-300);
+  --body-bg: linear-gradient(
+    to bottom,
+    rgb(233, 213, 255) 0%,
+    rgb(255, 255, 255) 100%
+  );
 }
 
 :root[class="dark-mode"] {
-  --body-bg: var(--p-surface-900);
-  --card-bg: var(--p-surface-500);
+  --body-bg: linear-gradient(
+    to bottom,
+    rgb(17, 0, 35) 0%,
+    rgb(63, 0, 151) 100%
+  );
 }
+
