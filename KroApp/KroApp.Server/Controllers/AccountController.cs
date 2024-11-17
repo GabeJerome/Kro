@@ -40,7 +40,7 @@ namespace KroApp.Server.Controllers
         return BadRequest(ModelState);
       }
 
-      var token = _authService.GenerateJwtToken(model.Email);
+      var token = _authService.GenerateJwtToken(model.Email, false);
 
       return Ok(new { Message = "User registered successfully", Token = token });
     }
@@ -66,7 +66,7 @@ namespace KroApp.Server.Controllers
         return Unauthorized(new SerializableError(ModelState));
       }
 
-      var token = _authService.GenerateJwtToken(model.Email);
+      var token = _authService.GenerateJwtToken(model.Email, model.RememberMe);
 
       return Ok(new { Message = "Login successful", Token = token });
     }

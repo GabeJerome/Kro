@@ -14,15 +14,14 @@ namespace KroApp.Server.Services
       _configuration = configuration;
     }
 
-    public string GenerateJwtToken(string email)
+    public string GenerateJwtToken(string email, bool rememberMe)
     {
       var claims = new[]
       {
         new Claim(JwtRegisteredClaimNames.Sub, email),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-    };
+      };
 
-      // Retrieve the secret key from configuration and check for null
       var jwtKey = _configuration["Jwt:Key"];
       if (string.IsNullOrEmpty(jwtKey))
       {
@@ -36,7 +35,7 @@ namespace KroApp.Server.Services
           issuer: "Kro.com",
           audience: "Kro.com",
           claims: claims,
-          expires: DateTime.Now.AddHours(4),
+          expires: rememberMe ? DateTime.UtcNow.AddDays(30) : DateTime.Now.AddHours(4),
           signingCredentials: creds
       );
 

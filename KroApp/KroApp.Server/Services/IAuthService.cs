@@ -2,6 +2,6 @@
 {
   public interface IAuthService
   {
-    string GenerateJwtToken(string email);
+    string GenerateJwtToken(string email, bool rememberMe);
   }
 }
