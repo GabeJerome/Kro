@@ -1,4 +1,5 @@
 import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios";
+import auth from "@/api/auth";
 
 // Create an Axios instance with default settings
 const apiClient = axios.create({
@@ -15,9 +16,11 @@ const handleError = (error: any) => {
 };
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("authToken");
-  if (token) {
+  const token = auth.getToken();
+  if (token && !auth.isTokenExpired(token)) {
     config.headers["Authorization"] = `Bearer ${token}`;
+  } else {
+    auth.logout();
   }
   return config;
 });

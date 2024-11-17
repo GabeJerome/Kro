@@ -176,10 +176,8 @@ async function handleLogin() {
     password: password.value,
   });
 
-  console.log("Login response:", response);
-
-  if (response?.Token) {
-    auth.saveToken(response.Token);
+  if (response?.token) {
+    auth.saveToken(response.token);
     toast.add({
       severity: "success",
       summary: "Login successful",
@@ -198,8 +196,8 @@ async function handleRegister() {
 
   console.log("Register response:", response);
 
-  if (response?.Token) {
-    auth.saveToken(response.Token);
+  if (response?.token) {
+    auth.saveToken(response.token);
     toast.add({
       severity: "success",
       summary: "Registration successful",

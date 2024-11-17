@@ -3,8 +3,8 @@ import type { AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
 
 interface AuthResponse {
-  Message: string;
-  Token: string;
+  message: string;
+  token: string;
 }
 
 interface JwtPayload {
@@ -63,10 +63,6 @@ const loginUser = async (credentials: {
   }
 };
 
-function logout() {
-  removeToken();
-}
-
 function saveToken(token: string) {
   localStorage.setItem("authToken", token);
 }
@@ -79,10 +75,15 @@ function removeToken() {
   localStorage.removeItem("authToken");
 }
 
+function logout() {
+  removeToken();
+}
+
 export default {
   registerUser,
   loginUser,
   logout,
+  isTokenExpired,
   saveToken,
   getToken,
 };
