@@ -133,6 +133,7 @@ const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const rememberMe = ref(false);
+const isLogin = ref(true);
 
 const resolver = ref(
   zodResolver(
@@ -163,8 +164,6 @@ const onFormSubmit = (form: any) => {
     console.log("Data is not valid");
   }
 };
-
-const isLogin = ref(true);
 
 function toggleAuthMode() {
   isLogin.value = !isLogin.value;
