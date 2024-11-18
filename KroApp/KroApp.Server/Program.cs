@@ -1,22 +1,75 @@
 using KroApp.Server.Models;
+using KroApp.Server.Models.Users;
+using KroApp.Server.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure the database context before setting up Identity
+builder.Services.AddDbContext<KroContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("KroDatabase") ?? throw new InvalidOperationException("Connection string 'KroDatabase' not found.")));
 
+// Configure Identity services
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<KroContext>()
+    .AddDefaultTokenProviders();
+
+var frontendUrl = builder.Configuration["FrontendUrl"];
+if (string.IsNullOrEmpty(frontendUrl))
+{
+  throw new InvalidOperationException("FrontendUrl must be configured in the app settings.");
+}
+
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy("AllowFrontend", policy =>
+  {
+    policy.WithOrigins(frontendUrl)
+          .AllowAnyHeader()
+          .AllowAnyMethod()
+          .AllowCredentials();
+  });
+});
+
+// Register other services
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<KroContext>(options =>
-  options.UseSqlServer(builder.Configuration.GetConnectionString("KroDatabase") ?? throw new InvalidOperationException("Connection string 'KroDatabase' not found.")));
-builder.Services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<KroContext>();
+// Configure JWT Authentication
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrEmpty(jwtKey))
+{
+  throw new InvalidOperationException("JWT Key must be configured in the app settings or user secrets.");
+}
+var key = Encoding.ASCII.GetBytes(jwtKey);
+
+builder.Services.AddAuthentication(x =>
+{
+  x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+  x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+  x.RequireHttpsMetadata = true;
+  x.SaveToken = true;
+  x.TokenValidationParameters = new TokenValidationParameters
+  {
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = new SymmetricSecurityKey(key),
+    ValidateIssuer = false,
+    ValidateAudience = false
+  };
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -30,12 +83,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Make sure to call UseAuthentication before UseAuthorization
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthentication();
-
 app.MapControllers();
-
 app.MapFallbackToFile("/index.html");
 
 app.Run();

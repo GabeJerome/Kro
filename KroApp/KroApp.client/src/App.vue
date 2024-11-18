@@ -1,18 +1,7 @@
 <template>
-  <main>
-    <div>
-      <div>Welcome to Kro</div>
-      <div class="card">
-        <span>
-          <InputText
-            v-model="value"
-            type="text"
-          />
-          <Button label="Save" />
-        </span>
-        <span>{{ text }}</span>
-      </div>
-    </div>
+  <main class="tablet-width mobile-medium-width mobile-full-width">
+    <Toast />
+    <LoginRegister />
     <Button
       label="Toggle Dark Mode"
       @click="toggleDarkMode"
@@ -21,15 +10,22 @@
 </template>
 
 <script setup lang="ts">
-import InputText from "primevue/inputtext";
-
 import Button from "primevue/button";
-import { ref } from "vue";
-const text = ref("");
+import LoginRegister from "@/views/LoginRegister.vue";
+import { onMounted } from "vue";
+import { Toast } from "primevue";
 
 function toggleDarkMode() {
-  document.documentElement.classList.toggle("dark-mode");
+  const isDarkMode = document.documentElement.classList.toggle("dark-mode");
+  sessionStorage.setItem("dark-mode", isDarkMode ? "enabled" : "disabled");
 }
+
+onMounted(() => {
+  const darkModePreference = sessionStorage.getItem("dark-mode");
+  if (darkModePreference === "enabled") {
+    document.documentElement.classList.add("dark-mode");
+  }
+});
 </script>
 
 <style scoped></style>
