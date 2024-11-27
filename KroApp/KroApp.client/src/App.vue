@@ -1,7 +1,9 @@
 <template>
   <main class="tablet-width mobile-medium-width mobile-full-width">
     <DrawerMenu />
-    <RouterView />
+    <div class="page-content">
+      <RouterView />
+    </div>
     <Toast />
   </main>
 </template>
@@ -19,4 +21,8 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.page-content {
+  margin: 0 3rem 0 3rem;
+}
+</style>
