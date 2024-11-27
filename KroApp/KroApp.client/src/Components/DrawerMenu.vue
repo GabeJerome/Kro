@@ -7,12 +7,6 @@
   >
     <div class="drawer-content">
       <RouterLink
-        to="/"
-        class="menu-link"
-        @click="visible = false"
-        >Home</RouterLink
-      >
-      <RouterLink
         to="/authenticate"
         class="menu-link"
         @click="visible = false"

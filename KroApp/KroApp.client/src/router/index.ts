@@ -4,7 +4,6 @@ import UserHome from "@/views/UserHome.vue";
 import Landing from "@/views/Landing.vue";
 
 const routes = [
-  { path: "/", name: "Landing", component: Landing },
   { path: "/user-home", name: "User Home", component: UserHome },
   { path: "/authenticate", name: "Authenticate", component: LoginRegister },
 ];
