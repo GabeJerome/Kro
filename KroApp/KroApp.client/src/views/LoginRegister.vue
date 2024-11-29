@@ -163,6 +163,7 @@ import { z } from "zod";
 import auth from "@/api/auth";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
+import { onMounted } from "vue";
 
 const router = useRouter();
 const toast = useToast();
@@ -205,6 +206,12 @@ const resolver = ref(
       }),
   ),
 );
+
+onMounted(() => {
+  if (auth.isAuthenticated()) {
+    router.push({ name: "User Home" });
+  }
+});
 
 const onFormSubmit = async (form: any) => {
   let success = false;

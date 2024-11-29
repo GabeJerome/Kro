@@ -7,6 +7,11 @@
   >
     <div class="drawer-content">
       <Button
+        label="Logout"
+        icon="pi pi-sign-out"
+        @click="logout"
+      ></Button>
+      <Button
         :label="isDarkMode ? 'Light Mode' : 'Dark Mode'"
         :icon="`${isDarkMode ? 'pi pi-sun' : 'pi pi-moon'}`"
         @click="toggleDarkMode"
@@ -25,6 +30,7 @@
 import { ref } from "vue";
 import Drawer from "primevue/drawer";
 import Button from "primevue/button";
+import auth from "@/api/auth";
 
 const visible = ref(false);
 const isDarkMode = ref(
@@ -33,6 +39,11 @@ const isDarkMode = ref(
 
 function toggleDrawer() {
   visible.value = !visible.value;
+}
+
+function logout() {
+  auth.logout();
+  toggleDrawer();
 }
 
 function toggleDarkMode() {

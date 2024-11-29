@@ -1,4 +1,5 @@
 import { post } from "@/api/api";
+import router from "@/router";
 import type { AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
 
@@ -90,6 +91,7 @@ function removeToken() {
 
 function logout() {
   removeToken();
+  router.push({ name: "Authenticate" });
 }
 
 export default {
