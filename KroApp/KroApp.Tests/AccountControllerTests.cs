@@ -207,7 +207,7 @@ public class AccountControllerTests
     // Assert
     var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
     var errors = Assert.IsType<SerializableError>(unauthorizedResult.Value);
-    Assert.Contains("Invalid login attempt.", (string[])errors[string.Empty]);
+    Assert.Contains("Username or password is incorrect. Please try again.", (string[])errors[string.Empty]);
     _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
   }
 
