@@ -11,6 +11,30 @@
           class="flex justify-center flex-col gap-4"
           @submit="onFormSubmit"
         >
+          <FormField
+            class="form-field"
+            v-if="!isLogin"
+          >
+            <FloatLabel variant="on">
+              <InputText
+                id="username-input"
+                v-model="username"
+                name="username"
+                class="p-mb-3"
+                fluid
+                v-tooltip="'Your username can be seen by other users.'"
+              />
+              <label for="username-input">Username</label>
+            </FloatLabel>
+            <Message
+              v-if="($form as any).username?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+            >
+              {{ ($form as any).username.error?.message }}
+            </Message>
+          </FormField>
           <FormField class="form-field">
             <FloatLabel variant="on">
               <InputText
@@ -42,7 +66,18 @@
                 type="password"
                 toggle-mask
                 fluid
-              />
+              >
+                <template #footer>
+                  <p class="mt-2">Requires at least:</p>
+                  <ul class="pl-2 ml-2 mt-0">
+                    <li>6 characters</li>
+                    <li>1 lowercase letter</li>
+                    <li>1 uppercase letter</li>
+                    <li>1 number</li>
+                    <li>1 special character</li>
+                  </ul>
+                </template>
+              </Password>
               <label for="password-input">Password</label>
             </FloatLabel>
             <Message
@@ -129,6 +164,7 @@ import auth from "@/api/auth";
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
+const username = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
@@ -139,11 +175,26 @@ const resolver = ref(
   zodResolver(
     z
       .object({
+        username: isLogin.value
+          ? z.string().optional()
+          : z.string().min(1, { message: "Username is required." }),
         email: z
           .string()
           .min(1, { message: "Email is required." })
           .email({ message: "Invalid email address." }),
-        password: z.string().min(6, { message: "Password is required." }),
+        password: z
+          .string()
+          .min(6, { message: "Password must be at least 6 characters long." })
+          .regex(/[a-z]/, {
+            message: "Password must contain at least one lowercase letter.",
+          })
+          .regex(/[A-Z]/, {
+            message: "Password must contain at least one uppercase letter.",
+          })
+          .regex(/\d/, { message: "Password must contain at least one digit." })
+          .regex(/[^a-zA-Z0-9]/, {
+            message: "Password must contain at least one special character.",
+          }),
         confirmPassword: z.string(),
       })
       .refine((data) => data.password === data.confirmPassword, {
@@ -188,6 +239,7 @@ async function handleLogin() {
 
 async function handleRegister() {
   const response = await auth.registerUser({
+    username: username.value,
     email: email.value,
     password: password.value,
     confirmPassword: confirmPassword.value,
@@ -216,5 +268,11 @@ async function handleRegister() {
 
 .form-field {
   margin-bottom: 0.5rem;
+}
+
+.p-tooltip {
+  width: fit-content;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 </style>

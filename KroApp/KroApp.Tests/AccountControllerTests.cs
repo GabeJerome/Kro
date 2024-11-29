@@ -43,6 +43,7 @@ public class AccountControllerTests
   {
     return new UserRegister
     {
+      Username = "Test Username",
       Email = "testuser@example.com",
       Password = "Password123!",
       ConfirmPassword = "Password123!"
@@ -128,11 +129,12 @@ public class AccountControllerTests
   }
 
   [Fact]
-  public async Task Register_ReturnsBadRequest_WhenModelStateIsInvalid()
+  public async Task Register_ReturnsBadRequest_WhenEmailIsMissing()
   {
     // Arrange
     _controller.ModelState.AddModelError("Email", "Email is required");
-    var registerModel = new UserRegister { Email = "", Password = "Password123!", ConfirmPassword = "Password123!" };
+    var registerModel = ValidRegisterModel();
+    registerModel.Email = "";
 
     // Act
     var result = await _controller.Register(registerModel);
@@ -141,6 +143,24 @@ public class AccountControllerTests
     var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
     var errors = Assert.IsType<SerializableError>(badRequestResult.Value);
     Assert.Contains("Email is required", (string[])errors["Email"]);
+    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
+  }
+
+  [Fact]
+  public async Task Register_ReturnsBadRequest_WhenUsernameIsMissing()
+  {
+    // Arrange
+    _controller.ModelState.AddModelError("Username", "Username is required");
+    var registerModel = ValidRegisterModel();
+    registerModel.Username = "";
+
+    // Act
+    var result = await _controller.Register(registerModel);
+
+    // Assert
+    var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+    var errors = Assert.IsType<SerializableError>(badRequestResult.Value);
+    Assert.Contains("Username is required", (string[])errors["Username"]);
     _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
   }
 

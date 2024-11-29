@@ -11,17 +11,24 @@ interface JwtPayload {
   exp: number;
 }
 
+interface UserRegister {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface UserLogin {}
+
 function isTokenExpired(token: string): boolean {
   const { exp } = jwtDecode<JwtPayload>(token);
   const currentTime = Math.floor(Date.now() / 1000);
   return exp < currentTime;
 }
 
-const registerUser = async (userData: {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}): Promise<AuthResponse | undefined> => {
+const registerUser = async (
+  userData: UserRegister,
+): Promise<AuthResponse | undefined> => {
   console.log("Registration Data:", userData);
   try {
     const response: AxiosResponse = await post<AuthResponse>(
@@ -40,10 +47,9 @@ const registerUser = async (userData: {
   }
 };
 
-const loginUser = async (credentials: {
-  email: string;
-  password: string;
-}): Promise<AuthResponse | undefined> => {
+const loginUser = async (
+  credentials: UserLogin,
+): Promise<AuthResponse | undefined> => {
   try {
     const response: AxiosResponse = await post<AuthResponse>(
       "/Account/login",
