@@ -9,14 +9,10 @@ namespace KroApp.Server.Controllers
   [Route("api/[controller]")]
   public class AccountController : ControllerBase
   {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
     private readonly IAuthService _authService;
 
-    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IAuthService authService)
+    public AccountController(IAuthService authService)
     {
-      _userManager = userManager;
-      _signInManager = signInManager;
       _authService = authService;
     }
 
@@ -28,8 +24,13 @@ namespace KroApp.Server.Controllers
         return BadRequest(ModelState);
       }
 
-      var user = new User { UserName = model.Username, Email = model.Email };
-      var result = await _userManager.CreateAsync(user, model.Password);
+      if (await _authService.UserExists(model.Email))
+      {
+        ModelState.AddModelError(string.Empty, "An account with this email already exists.");
+        return BadRequest(ModelState);
+      }
+
+      var result = await _authService.RegisterUser(model);
 
       if (!result.Succeeded)
       {
@@ -53,7 +54,7 @@ namespace KroApp.Server.Controllers
         return BadRequest(ModelState);
       }
 
-      var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+      var result = await _authService.LogIn(model);
 
       if (result.IsLockedOut)
       {
@@ -62,11 +63,11 @@ namespace KroApp.Server.Controllers
 
       if (!result.Succeeded)
       {
-        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        ModelState.AddModelError(string.Empty, "Username or password is incorrect. Please try again.");
         return Unauthorized(new SerializableError(ModelState));
       }
 
-      var token = _authService.GenerateJwtToken(model.Email, model.RememberMe);
+      var token = _authService.GenerateJwtToken(model.Username, model.RememberMe);
 
       return Ok(new { Message = "Login successful", Token = token });
     }

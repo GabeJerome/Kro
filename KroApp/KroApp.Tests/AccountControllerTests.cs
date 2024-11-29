@@ -18,6 +18,8 @@ public class AccountControllerTests
   private readonly Mock<IConfiguration> _configurationMock;
   private readonly AccountController _controller;
 
+  private readonly string expectedJwt = "123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()=+";
+
   public AccountControllerTests()
   {
     var userStoreMock = new Mock<IUserStore<User>>();
@@ -34,9 +36,11 @@ public class AccountControllerTests
         Mock.Of<IUserConfirmation<User>>());
 
     _configurationMock = new Mock<IConfiguration>();
+    _configurationMock.Setup(c => c["Jwt:Key"]).Returns(expectedJwt);
+
     _authServiceMock = new Mock<IAuthService>();
 
-    _controller = new AccountController(_userManagerMock.Object, _signInManagerMock.Object, _authServiceMock.Object);
+    _controller = new AccountController(_authServiceMock.Object);
   }
 
   private UserRegister ValidRegisterModel()
@@ -54,7 +58,7 @@ public class AccountControllerTests
   {
     return new UserLogin
     {
-      Email = "testuser@example.com",
+      Username = "Test Username",
       Password = "Password123!",
       RememberMe = false
     };
@@ -66,12 +70,11 @@ public class AccountControllerTests
   public async Task Register_ReturnsSuccess_WhenModelIsValid()
   {
     // Arrange
-    var expectedJwt = "mock-jwt";
     var registerModel = ValidRegisterModel();
-    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), registerModel.Password))
-                    .ReturnsAsync(IdentityResult.Success);
     _authServiceMock.Setup(auth => auth.GenerateJwtToken(registerModel.Email, false))
                     .Returns(expectedJwt);
+    _authServiceMock.Setup(auth => auth.RegisterUser(It.IsAny<UserRegister>()))
+                    .ReturnsAsync(IdentityResult.Success);
 
     // Act
     var result = await _controller.Register(registerModel);
@@ -96,7 +99,7 @@ public class AccountControllerTests
     var existingUser = new User { UserName = registerModel.Email, Email = registerModel.Email };
     _userManagerMock.Setup(um => um.FindByEmailAsync(registerModel.Email))
                     .ReturnsAsync(existingUser);
-    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), registerModel.Password))
+    _authServiceMock.Setup(auth => auth.RegisterUser(It.IsAny<UserRegister>()))
                     .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "User already exists" }));
 
     // Act
@@ -115,7 +118,7 @@ public class AccountControllerTests
     // Arrange
     var registerModel = ValidRegisterModel();
     registerModel.Password = "123";
-    _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), registerModel.Password))
+    _authServiceMock.Setup(auth => auth.RegisterUser(It.IsAny<UserRegister>()))
                     .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Password is too weak" }));
 
     // Act
@@ -171,10 +174,8 @@ public class AccountControllerTests
   {
     // Arrange
     var loginModel = ValidLoginModel();
-    var expectedJwt = "mock-jwt";
-    _signInManagerMock.Setup(sm => sm.PasswordSignInAsync(loginModel.Email, loginModel.Password, false, false))
-                      .ReturnsAsync(IdentitySignInResult.Success);
-    _authServiceMock.Setup(auth => auth.GenerateJwtToken(loginModel.Email, loginModel.RememberMe))
+    _authServiceMock.Setup(auth => auth.LogIn(loginModel)).ReturnsAsync(IdentitySignInResult.Success);
+    _authServiceMock.Setup(auth => auth.GenerateJwtToken(loginModel.Username, loginModel.RememberMe))
                     .Returns(expectedJwt);
 
     // Act
@@ -198,8 +199,7 @@ public class AccountControllerTests
     // Arrange
     var loginModel = ValidLoginModel();
     loginModel.Password = "wrongpassword"; // Invalid password
-    _signInManagerMock.Setup(sm => sm.PasswordSignInAsync(loginModel.Email, loginModel.Password, false, false))
-                      .ReturnsAsync(IdentitySignInResult.Failed);
+    _authServiceMock.Setup(auth => auth.LogIn(loginModel)).ReturnsAsync(IdentitySignInResult.Failed);
 
     // Act
     var result = await _controller.Login(loginModel);
@@ -216,8 +216,8 @@ public class AccountControllerTests
   {
     // Arrange
     var loginModel = ValidLoginModel();
-    _signInManagerMock.Setup(sm => sm.PasswordSignInAsync(loginModel.Email, loginModel.Password, false, false))
-                      .ReturnsAsync(IdentitySignInResult.LockedOut);
+
+    _authServiceMock.Setup(auth => auth.LogIn(loginModel)).ReturnsAsync(IdentitySignInResult.LockedOut);
 
     // Act
     var result = await _controller.Login(loginModel);

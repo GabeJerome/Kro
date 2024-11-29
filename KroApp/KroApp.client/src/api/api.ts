@@ -11,7 +11,6 @@ const apiClient = axios.create({
 });
 
 const handleError = (error: any) => {
-  console.error("API Error:", error);
   throw error;
 };
 

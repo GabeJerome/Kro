@@ -11,10 +11,7 @@
           class="flex justify-center flex-col gap-4"
           @submit="onFormSubmit"
         >
-          <FormField
-            class="form-field"
-            v-if="!isLogin"
-          >
+          <FormField class="form-field">
             <FloatLabel variant="on">
               <InputText
                 id="username-input"
@@ -35,7 +32,10 @@
               {{ ($form as any).username.error?.message }}
             </Message>
           </FormField>
-          <FormField class="form-field">
+          <FormField
+            class="form-field"
+            v-if="!isLogin"
+          >
             <FloatLabel variant="on">
               <InputText
                 id="email-input"
@@ -162,7 +162,9 @@ import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import auth from "@/api/auth";
 import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const toast = useToast();
 const username = ref("");
 const email = ref("");
@@ -204,15 +206,19 @@ const resolver = ref(
   ),
 );
 
-const onFormSubmit = (form: any) => {
+const onFormSubmit = async (form: any) => {
+  let success = false;
+
   if (form.valid) {
     if (isLogin.value) {
-      handleLogin();
+      success = await handleLogin();
     } else {
-      handleRegister();
+      success = await handleRegister();
     }
-  } else {
-    console.log("Data is not valid");
+  }
+
+  if (success) {
+    router.push({ name: "User Home" });
   }
 };
 
@@ -222,10 +228,9 @@ function toggleAuthMode() {
 
 async function handleLogin() {
   const response = await auth.loginUser({
-    email: email.value,
+    username: username.value,
     password: password.value,
   });
-
   if (response?.token) {
     auth.saveToken(response.token);
     toast.add({
@@ -234,6 +239,15 @@ async function handleLogin() {
       detail: "You are now logged in.",
       life: 3000,
     });
+    return true;
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Login failed",
+      detail: response.data[""].join("\n"),
+      life: 3000,
+    });
+    return false;
   }
 }
 
@@ -244,9 +258,6 @@ async function handleRegister() {
     password: password.value,
     confirmPassword: confirmPassword.value,
   });
-
-  console.log("Register response:", response);
-
   if (response?.token) {
     auth.saveToken(response.token);
     toast.add({
@@ -255,6 +266,15 @@ async function handleRegister() {
       detail: "Your account has been created.",
       life: 3000,
     });
+    return true;
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Registration failed",
+      detail: response.data[""].join("\n"),
+      life: 3000,
+    });
+    return false;
   }
 }
 </script>

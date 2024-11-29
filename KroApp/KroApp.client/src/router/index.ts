@@ -5,7 +5,7 @@ import Landing from "@/views/Landing.vue";
 
 const routes = [
   { path: "/user-home", name: "User Home", component: UserHome },
-  { path: "/authenticate", name: "Authenticate", component: LoginRegister },
+  { path: "", name: "Authenticate", component: LoginRegister },
 ];
 
 const routerOptions: RouterOptions = {

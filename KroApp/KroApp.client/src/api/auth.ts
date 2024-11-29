@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 interface AuthResponse {
   message: string;
   token: string;
+  data: {};
 }
 
 interface JwtPayload {
@@ -18,7 +19,10 @@ interface UserRegister {
   confirmPassword: string;
 }
 
-interface UserLogin {}
+interface UserLogin {
+  username: string;
+  password: string;
+}
 
 function isTokenExpired(token: string): boolean {
   const { exp } = jwtDecode<JwtPayload>(token);
@@ -26,46 +30,27 @@ function isTokenExpired(token: string): boolean {
   return exp < currentTime;
 }
 
-const registerUser = async (
-  userData: UserRegister,
-): Promise<AuthResponse | undefined> => {
-  console.log("Registration Data:", userData);
+const registerUser = async (userData: UserRegister): Promise<AuthResponse> => {
   try {
     const response: AxiosResponse = await post<AuthResponse>(
       "/Account/register",
       userData,
     );
-
-    if (response.status == 200) {
-      return response.data;
-    } else {
-      return undefined;
-    }
+    return response.data;
   } catch (error) {
-    console.log("Registration error:", error);
-    return undefined;
+    return error.response;
   }
 };
 
-const loginUser = async (
-  credentials: UserLogin,
-): Promise<AuthResponse | undefined> => {
+const loginUser = async (credentials: UserLogin): Promise<AuthResponse> => {
   try {
     const response: AxiosResponse = await post<AuthResponse>(
       "/Account/login",
       credentials,
     );
-
-    if (response.status === 200) {
-      return response.data;
-    } else if (response.status === 423) {
-      return undefined;
-    } else {
-      return undefined;
-    }
+    return response.data;
   } catch (error) {
-    console.error("Login error:", error);
-    return undefined;
+    return error.response;
   }
 };
 
