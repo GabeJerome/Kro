@@ -42,6 +42,16 @@ function isAuthenticated() {
   }
 }
 
+function getUsername(token: string): string | null {
+  try {
+    const decoded = jwtDecode<JwtPayload & { sub?: string }>(token);
+    return decoded.sub || null;
+  } catch (error) {
+    console.error("Invalid JWT:", error);
+    return null;
+  }
+}
+
 const registerUser = async (userData: UserRegister): Promise<AuthResponse> => {
   try {
     const response: AxiosResponse = await post<AuthResponse>(
@@ -88,6 +98,7 @@ export default {
   logout,
   isTokenExpired,
   isAuthenticated,
+  getUsername,
   saveToken,
   getToken,
 };

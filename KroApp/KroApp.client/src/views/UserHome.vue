@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="title-bar">User's Name</div>
+    <div class="title-bar">{{ username }}</div>
     <TabMenu :model="items" />
   </div>
   <div id="ingredient-list">This is the ingredient list</div>
@@ -21,6 +21,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { TabMenu } from "primevue";
+import { onMounted } from "vue";
+import auth from "@/api/auth";
+
+const username = ref("");
 
 const items = ref([
   {
@@ -35,6 +39,10 @@ const items = ref([
     command: switchToGroceries,
   },
 ]);
+
+onMounted(() => {
+  username.value = auth.getUsername(auth.getToken());
+});
 
 function switchToIngredients() {
   document.getElementById("recipe-list").style.display = "none";
