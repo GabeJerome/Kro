@@ -27,7 +27,19 @@ interface UserLogin {
 function isTokenExpired(token: string): boolean {
   const { exp } = jwtDecode<JwtPayload>(token);
   const currentTime = Math.floor(Date.now() / 1000);
-  return exp < currentTime;
+  return exp && exp > currentTime;
+}
+
+function isAuthenticated() {
+  const token = localStorage.getItem("authToken");
+  if (!token) return false;
+
+  try {
+    return isTokenExpired(token);
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return false;
+  }
 }
 
 const registerUser = async (userData: UserRegister): Promise<AuthResponse> => {
@@ -75,6 +87,7 @@ export default {
   loginUser,
   logout,
   isTokenExpired,
+  isAuthenticated,
   saveToken,
   getToken,
 };

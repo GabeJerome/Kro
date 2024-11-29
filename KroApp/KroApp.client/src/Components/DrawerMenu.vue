@@ -6,19 +6,6 @@
     :dismissible="true"
   >
     <div class="drawer-content">
-      <RouterLink
-        to="/authenticate"
-        class="menu-link"
-        @click="visible = false"
-        >Login or Register</RouterLink
-      >
-      <RouterLink
-        to="/user-home"
-        class="menu-link"
-        @click="visible = false"
-        >User Home</RouterLink
-      >
-
       <Button
         :label="isDarkMode ? 'Light Mode' : 'Dark Mode'"
         :icon="`${isDarkMode ? 'pi pi-sun' : 'pi pi-moon'}`"
@@ -36,7 +23,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { RouterLink } from "vue-router";
 import Drawer from "primevue/drawer";
 import Button from "primevue/button";
 
@@ -52,10 +38,7 @@ function toggleDrawer() {
 function toggleDarkMode() {
   document.documentElement.classList.toggle("dark-mode");
   isDarkMode.value = !isDarkMode.value;
-  sessionStorage.setItem(
-    "dark-mode",
-    isDarkMode.value ? "enabled" : "disabled",
-  );
+  localStorage.setItem("dark-mode", isDarkMode.value ? "enabled" : "disabled");
 }
 </script>
 
