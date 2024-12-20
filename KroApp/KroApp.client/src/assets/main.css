@@ -1,4 +1,6 @@
 @import "./vars.css";
+@import "primeicons/primeicons.css";
+@import "@fortawesome/fontawesome-free/css/all.css";
 
 html {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",

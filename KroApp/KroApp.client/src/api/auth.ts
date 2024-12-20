@@ -1,65 +1,81 @@
 import { post } from "@/api/api";
+import router from "@/router";
 import type { AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
 
 interface AuthResponse {
   message: string;
   token: string;
+  data: { "": [] };
 }
 
 interface JwtPayload {
   exp: number;
 }
 
-function isTokenExpired(token: string): boolean {
-  const { exp } = jwtDecode<JwtPayload>(token);
-  const currentTime = Math.floor(Date.now() / 1000);
-  return exp < currentTime;
-}
-
-const registerUser = async (userData: {
+interface UserRegister {
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
-}): Promise<AuthResponse | undefined> => {
-  console.log("Registration Data:", userData);
+}
+
+interface UserLogin {
+  username: string;
+  password: string;
+}
+
+function isTokenExpired(token: string): boolean {
+  const { exp } = jwtDecode<JwtPayload>(token);
+  const currentTime = Math.floor(Date.now() / 1000);
+  return (exp && exp > currentTime) as boolean;
+}
+
+function isAuthenticated() {
+  const token = localStorage.getItem("authToken");
+  if (!token) return false;
+
+  try {
+    return isTokenExpired(token);
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return false;
+  }
+}
+
+function getUsername(token: string): string | null {
+  try {
+    const decoded = jwtDecode<JwtPayload & { given_name?: string }>(token);
+    console.log(decoded);
+    console.log(decoded.given_name);
+    return decoded.given_name || null;
+  } catch (error) {
+    console.error("Invalid JWT:", error);
+    return null;
+  }
+}
+
+const registerUser = async (userData: UserRegister): Promise<AuthResponse> => {
   try {
     const response: AxiosResponse = await post<AuthResponse>(
       "/Account/register",
       userData,
     );
-
-    if (response.status == 200) {
-      return response.data;
-    } else {
-      return undefined;
-    }
-  } catch (error) {
-    console.log("Registration error:", error);
-    return undefined;
+    return response.data;
+  } catch (error: any) {
+    return error.response;
   }
 };
 
-const loginUser = async (credentials: {
-  email: string;
-  password: string;
-}): Promise<AuthResponse | undefined> => {
+const loginUser = async (credentials: UserLogin): Promise<AuthResponse> => {
   try {
     const response: AxiosResponse = await post<AuthResponse>(
       "/Account/login",
       credentials,
     );
-
-    if (response.status === 200) {
-      return response.data;
-    } else if (response.status === 423) {
-      return undefined;
-    } else {
-      return undefined;
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-    return undefined;
+    return response.data;
+  } catch (error: any) {
+    return error.response;
   }
 };
 
@@ -77,6 +93,7 @@ function removeToken() {
 
 function logout() {
   removeToken();
+  router.push({ name: "Authenticate" });
 }
 
 export default {
@@ -84,6 +101,8 @@ export default {
   loginUser,
   logout,
   isTokenExpired,
+  isAuthenticated,
+  getUsername,
   saveToken,
   getToken,
 };

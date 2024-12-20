@@ -47,6 +47,24 @@ export default [
         },
       ],
       indent: ["error", 2],
+      "vue/singleline-html-element-content-newline": [
+        "error",
+        {
+          ignoreWhenNoAttributes: true,
+          ignoreWhenEmpty: true,
+          ignores: ["pre", "textarea"],
+          externalIgnores: [],
+        },
+      ],
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+          allowTaggedTemplates: false,
+        },
+      ],
+      "vue/singleline-html-element-content-newline": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "vue/multi-word-component-names": "off",
       "unicorn/prevent-abbreviations": "error",

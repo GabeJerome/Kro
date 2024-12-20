@@ -5,9 +5,7 @@ namespace KroApp.Server.Models.Users
     public class UserLogin
     {
     [Required]
-    [EmailAddress]
-    [Display(Name = "Email")]
-    public required string Email { get; set; }
+    public required string Username { get; set; }
 
     [Required]
     [DataType(DataType.Password)]

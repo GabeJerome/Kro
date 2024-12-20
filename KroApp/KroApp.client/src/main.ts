@@ -6,6 +6,8 @@ import PrimeVue from "primevue/config";
 import Lara from "@primevue/themes/lara";
 import { definePreset } from "@primevue/themes";
 import ToastService from "primevue/toastservice";
+import router from "@/router";
+import Tooltip from "primevue/tooltip";
 
 const app = createApp(App);
 
@@ -67,5 +69,8 @@ app.use(PrimeVue, {
 });
 
 app.use(ToastService);
+app.use(router);
+
+app.directive("tooltip", Tooltip);
 
 app.mount("#app");

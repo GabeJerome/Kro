@@ -1,24 +1,17 @@
 <template>
   <main class="tablet-width mobile-medium-width mobile-full-width">
+    <DrawerMenu />
+    <div class="page-content">
+      <RouterView />
+    </div>
     <Toast />
-    <LoginRegister />
-    <Button
-      label="Toggle Dark Mode"
-      @click="toggleDarkMode"
-    />
   </main>
 </template>
 
 <script setup lang="ts">
-import Button from "primevue/button";
-import LoginRegister from "@/views/LoginRegister.vue";
 import { onMounted } from "vue";
 import { Toast } from "primevue";
-
-function toggleDarkMode() {
-  const isDarkMode = document.documentElement.classList.toggle("dark-mode");
-  sessionStorage.setItem("dark-mode", isDarkMode ? "enabled" : "disabled");
-}
+import DrawerMenu from "@/components/DrawerMenu.vue";
 
 onMounted(() => {
   const darkModePreference = sessionStorage.getItem("dark-mode");
@@ -28,4 +21,8 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.page-content {
+  margin: 0 3rem 0 3rem;
+}
+</style>

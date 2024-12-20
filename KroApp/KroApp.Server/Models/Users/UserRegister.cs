@@ -5,6 +5,9 @@ namespace KroApp.Server.Models.Users
   public class UserRegister
   {
     [Required]
+    public required string Username { get; set; }
+
+    [Required]
     [EmailAddress]
     [Display(Name = "Email")]
     public required string Email { get; set; }
@@ -22,9 +25,5 @@ namespace KroApp.Server.Models.Users
 
     [Display(Name = "Remember Me")]
     public bool RememberMe { get; set; } = false;
-
-    public string? FirstName { get; set; }
-
-    public string? LastName { get; set; }
   }
 }

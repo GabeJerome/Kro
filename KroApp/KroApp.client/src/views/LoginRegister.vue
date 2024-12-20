@@ -14,13 +14,37 @@
           <FormField class="form-field">
             <FloatLabel variant="on">
               <InputText
+                id="username-input"
+                v-model="username"
+                v-tooltip="'Your username can be seen by other users.'"
+                name="username"
+                class="p-mb-3"
+                fluid
+              />
+              <label for="username-input"> Username </label>
+            </FloatLabel>
+            <Message
+              v-if="($form as any).username?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+            >
+              {{ ($form as any).username.error?.message }}
+            </Message>
+          </FormField>
+          <FormField
+            v-if="!isLogin"
+            class="form-field"
+          >
+            <FloatLabel variant="on">
+              <InputText
                 id="email-input"
                 v-model="email"
                 name="email"
                 class="p-mb-3"
                 fluid
               />
-              <label for="email-input">Email</label>
+              <label for="email-input"> Email </label>
             </FloatLabel>
             <Message
               v-if="($form as any).email?.invalid"
@@ -42,8 +66,19 @@
                 type="password"
                 toggle-mask
                 fluid
-              />
-              <label for="password-input">Password</label>
+              >
+                <template #footer>
+                  <p class="mt-2">Requires at least:</p>
+                  <ul class="pl-2 ml-2 mt-0">
+                    <li>6 characters</li>
+                    <li>1 lowercase letter</li>
+                    <li>1 uppercase letter</li>
+                    <li>1 number</li>
+                    <li>1 special character</li>
+                  </ul>
+                </template>
+              </Password>
+              <label for="password-input"> Password </label>
             </FloatLabel>
             <Message
               v-if="($form as any).password?.invalid"
@@ -79,7 +114,7 @@
                 fluid
                 :feedback="false"
               />
-              <label for="confirm-password-input">Confirm Password</label>
+              <label for="confirm-password-input"> Confirm Password </label>
             </FloatLabel>
             <Message
               v-if="($form as any).confirmPassword?.invalid"
@@ -127,22 +162,42 @@ import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import auth from "@/api/auth";
 import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
+import { onMounted } from "vue";
 
+const router = useRouter();
 const toast = useToast();
+const username = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const rememberMe = ref(false);
+const isLogin = ref(true);
 
 const resolver = ref(
   zodResolver(
     z
       .object({
+        username: isLogin.value
+          ? z.string().optional()
+          : z.string().min(1, { message: "Username is required." }),
         email: z
           .string()
           .min(1, { message: "Email is required." })
           .email({ message: "Invalid email address." }),
-        password: z.string().min(6, { message: "Password is required." }),
+        password: z
+          .string()
+          .min(6, { message: "Password must be at least 6 characters long." })
+          .regex(/[a-z]/, {
+            message: "Password must contain at least one lowercase letter.",
+          })
+          .regex(/[A-Z]/, {
+            message: "Password must contain at least one uppercase letter.",
+          })
+          .regex(/\d/, { message: "Password must contain at least one digit." })
+          .regex(/[^a-zA-Z0-9]/, {
+            message: "Password must contain at least one special character.",
+          }),
         confirmPassword: z.string(),
       })
       .refine((data) => data.password === data.confirmPassword, {
@@ -152,19 +207,27 @@ const resolver = ref(
   ),
 );
 
-const onFormSubmit = (form: any) => {
+onMounted(() => {
+  if (auth.isAuthenticated()) {
+    router.push({ name: "User Home" });
+  }
+});
+
+const onFormSubmit = async (form: any) => {
+  let success = false;
+
   if (form.valid) {
     if (isLogin.value) {
-      handleLogin();
+      success = await handleLogin();
     } else {
-      handleRegister();
+      success = await handleRegister();
     }
-  } else {
-    console.log("Data is not valid");
+  }
+
+  if (success) {
+    router.push({ name: "User Home" });
   }
 };
-
-const isLogin = ref(true);
 
 function toggleAuthMode() {
   isLogin.value = !isLogin.value;
@@ -172,10 +235,9 @@ function toggleAuthMode() {
 
 async function handleLogin() {
   const response = await auth.loginUser({
-    email: email.value,
+    username: username.value,
     password: password.value,
   });
-
   if (response?.token) {
     auth.saveToken(response.token);
     toast.add({
@@ -184,18 +246,25 @@ async function handleLogin() {
       detail: "You are now logged in.",
       life: 3000,
     });
+    return true;
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Login failed",
+      detail: response.data[""].join("\n"),
+      life: 3000,
+    });
+    return false;
   }
 }
 
 async function handleRegister() {
   const response = await auth.registerUser({
+    username: username.value,
     email: email.value,
     password: password.value,
     confirmPassword: confirmPassword.value,
   });
-
-  console.log("Register response:", response);
-
   if (response?.token) {
     auth.saveToken(response.token);
     toast.add({
@@ -204,6 +273,15 @@ async function handleRegister() {
       detail: "Your account has been created.",
       life: 3000,
     });
+    return true;
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Registration failed",
+      detail: response.data[""].join("\n"),
+      life: 3000,
+    });
+    return false;
   }
 }
 </script>
@@ -217,5 +295,11 @@ async function handleRegister() {
 
 .form-field {
   margin-bottom: 0.5rem;
+}
+
+.p-tooltip {
+  width: fit-content;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 </style>
