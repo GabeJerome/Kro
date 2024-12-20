@@ -10,7 +10,7 @@
         label="Logout"
         icon="pi pi-sign-out"
         @click="logout"
-      ></Button>
+      />
       <Button
         :label="isDarkMode ? 'Light Mode' : 'Dark Mode'"
         :icon="`${isDarkMode ? 'pi pi-sun' : 'pi pi-moon'}`"

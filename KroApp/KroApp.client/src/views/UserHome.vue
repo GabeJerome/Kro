@@ -1,6 +1,8 @@
 <template>
   <div class="page-container">
-    <div class="title-bar">{{ username }}</div>
+    <div class="title-bar">
+      {{ username }}
+    </div>
     <TabMenu :model="items" />
   </div>
   <div id="ingredient-list">This is the ingredient list</div>

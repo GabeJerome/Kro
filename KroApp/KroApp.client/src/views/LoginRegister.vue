@@ -16,12 +16,12 @@
               <InputText
                 id="username-input"
                 v-model="username"
+                v-tooltip="'Your username can be seen by other users.'"
                 name="username"
                 class="p-mb-3"
                 fluid
-                v-tooltip="'Your username can be seen by other users.'"
               />
-              <label for="username-input">Username</label>
+              <label for="username-input"> Username </label>
             </FloatLabel>
             <Message
               v-if="($form as any).username?.invalid"
@@ -33,8 +33,8 @@
             </Message>
           </FormField>
           <FormField
-            class="form-field"
             v-if="!isLogin"
+            class="form-field"
           >
             <FloatLabel variant="on">
               <InputText
@@ -44,7 +44,7 @@
                 class="p-mb-3"
                 fluid
               />
-              <label for="email-input">Email</label>
+              <label for="email-input"> Email </label>
             </FloatLabel>
             <Message
               v-if="($form as any).email?.invalid"
@@ -78,7 +78,7 @@
                   </ul>
                 </template>
               </Password>
-              <label for="password-input">Password</label>
+              <label for="password-input"> Password </label>
             </FloatLabel>
             <Message
               v-if="($form as any).password?.invalid"
@@ -114,7 +114,7 @@
                 fluid
                 :feedback="false"
               />
-              <label for="confirm-password-input">Confirm Password</label>
+              <label for="confirm-password-input"> Confirm Password </label>
             </FloatLabel>
             <Message
               v-if="($form as any).confirmPassword?.invalid"

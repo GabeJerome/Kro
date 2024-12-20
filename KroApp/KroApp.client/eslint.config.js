@@ -64,6 +64,7 @@ export default [
           allowTaggedTemplates: false,
         },
       ],
+      "vue/singleline-html-element-content-newline": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "vue/multi-word-component-names": "off",
       "unicorn/prevent-abbreviations": "error",
