@@ -175,6 +175,7 @@ public class AccountControllerTests
     // Arrange
     var loginModel = ValidLoginModel();
     _authServiceMock.Setup(auth => auth.LogIn(loginModel)).ReturnsAsync(IdentitySignInResult.Success);
+    _authServiceMock.Setup(auth => auth.GetUser(loginModel.Username)).ReturnsAsync(new User());
     _authServiceMock.Setup(auth => auth.GenerateJwtToken(It.IsAny<string>(), loginModel.Username, loginModel.RememberMe))
                     .Returns(expectedJwt);
 
