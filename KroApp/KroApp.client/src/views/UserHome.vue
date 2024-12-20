@@ -41,26 +41,26 @@ const items = ref([
 ]);
 
 onMounted(() => {
-  username.value = auth.getUsername(auth.getToken());
+  username.value = auth.getUsername(auth.getToken()!) || "";
 });
 
 function switchToIngredients() {
-  document.getElementById("recipe-list").style.display = "none";
-  document.getElementById("grocery-list").style.display = "none";
+  document.getElementById("recipe-list")!.style.display = "none";
+  document.getElementById("grocery-list")!.style.display = "none";
 
-  document.getElementById("ingredient-list").style.display = "block";
+  document.getElementById("ingredient-list")!.style.display = "block";
 }
 function switchToRecipes() {
-  document.getElementById("ingredient-list").style.display = "none";
-  document.getElementById("grocery-list").style.display = "none";
+  document.getElementById("ingredient-list")!.style.display = "none";
+  document.getElementById("grocery-list")!.style.display = "none";
 
-  document.getElementById("recipe-list").style.display = "block";
+  document.getElementById("recipe-list")!.style.display = "block";
 }
 function switchToGroceries() {
-  document.getElementById("ingredient-list").style.display = "none";
-  document.getElementById("recipe-list").style.display = "none";
+  document.getElementById("ingredient-list")!.style.display = "none";
+  document.getElementById("recipe-list")!.style.display = "none";
 
-  document.getElementById("grocery-list").style.display = "block";
+  document.getElementById("grocery-list")!.style.display = "block";
 }
 </script>
 

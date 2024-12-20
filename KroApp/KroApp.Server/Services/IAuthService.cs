@@ -7,7 +7,8 @@ namespace KroApp.Server.Services
   {
     Task<SignInResult> LogIn(UserLogin model);
     Task<IdentityResult> RegisterUser(UserRegister model);
-    Task<bool> UserExists(string email);
-    string GenerateJwtToken(string email, bool rememberMe);
+    Task<bool> UserExists(string usernameOrEmail);
+    Task<User?> GetUser(string usernameOrEmail);
+    string GenerateJwtToken(string email, string username, bool rememberMe);
   }
 }

@@ -20,11 +20,13 @@ namespace KroApp.Server.Services
       _signInManager = signInManager;
     }
 
-    public string GenerateJwtToken(string email, bool rememberMe)
+    public string GenerateJwtToken(string email, string username, bool rememberMe)
     {
       var claims = new[]
       {
         new Claim(JwtRegisteredClaimNames.Sub, email),
+        new Claim(JwtRegisteredClaimNames.Email, email),
+        new Claim(JwtRegisteredClaimNames.GivenName, username),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
       };
 
@@ -59,9 +61,14 @@ namespace KroApp.Server.Services
       return await _userManager.CreateAsync(user, model.Password);
     }
 
-    public async Task<bool> UserExists(string email)
+    public async Task<bool> UserExists(string usernameOrEmail)
     {
-      return await _userManager.FindByEmailAsync(email) != null;
+      return await _userManager.FindByNameAsync(usernameOrEmail) != null || await _userManager.FindByEmailAsync(usernameOrEmail) != null;
+    }
+    
+    public async Task<User?> GetUser(string usernameOrEmail)
+    {
+      return await _userManager.FindByNameAsync(usernameOrEmail) ?? await _userManager.FindByEmailAsync(usernameOrEmail);
     }
   }
 }

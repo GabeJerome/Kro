@@ -71,7 +71,7 @@ public class AccountControllerTests
   {
     // Arrange
     var registerModel = ValidRegisterModel();
-    _authServiceMock.Setup(auth => auth.GenerateJwtToken(registerModel.Email, false))
+    _authServiceMock.Setup(auth => auth.GenerateJwtToken(registerModel.Email, registerModel.Username, false))
                     .Returns(expectedJwt);
     _authServiceMock.Setup(auth => auth.RegisterUser(It.IsAny<UserRegister>()))
                     .ReturnsAsync(IdentityResult.Success);
@@ -109,7 +109,7 @@ public class AccountControllerTests
     var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
     var errors = Assert.IsType<SerializableError>(badRequestResult.Value);
     Assert.Contains("User already exists", (string[])errors[string.Empty]);
-    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
+    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), It.IsAny<string>(), false), Times.Never);
   }
 
   [Fact]
@@ -128,7 +128,7 @@ public class AccountControllerTests
     var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
     var errors = Assert.IsType<SerializableError>(badRequestResult.Value);
     Assert.Contains("Password is too weak", (string[])errors[string.Empty]);
-    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
+    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), It.IsAny<string>(), false), Times.Never);
   }
 
   [Fact]
@@ -146,7 +146,7 @@ public class AccountControllerTests
     var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
     var errors = Assert.IsType<SerializableError>(badRequestResult.Value);
     Assert.Contains("Email is required", (string[])errors["Email"]);
-    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
+    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), It.IsAny<string>(), false), Times.Never);
   }
 
   [Fact]
@@ -164,7 +164,7 @@ public class AccountControllerTests
     var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
     var errors = Assert.IsType<SerializableError>(badRequestResult.Value);
     Assert.Contains("Username is required", (string[])errors["Username"]);
-    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
+    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), It.IsAny<string>(), false), Times.Never);
   }
 
   // Test Cases for Login Action
@@ -175,7 +175,7 @@ public class AccountControllerTests
     // Arrange
     var loginModel = ValidLoginModel();
     _authServiceMock.Setup(auth => auth.LogIn(loginModel)).ReturnsAsync(IdentitySignInResult.Success);
-    _authServiceMock.Setup(auth => auth.GenerateJwtToken(loginModel.Username, loginModel.RememberMe))
+    _authServiceMock.Setup(auth => auth.GenerateJwtToken(It.IsAny<string>(), loginModel.Username, loginModel.RememberMe))
                     .Returns(expectedJwt);
 
     // Act
@@ -208,7 +208,7 @@ public class AccountControllerTests
     var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
     var errors = Assert.IsType<SerializableError>(unauthorizedResult.Value);
     Assert.Contains("Username or password is incorrect. Please try again.", (string[])errors[string.Empty]);
-    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
+    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), It.IsAny<string>(), false), Times.Never);
   }
 
   [Fact]
@@ -225,6 +225,6 @@ public class AccountControllerTests
     // Assert
     var lockedResult = Assert.IsType<ObjectResult>(result);
     Assert.Equal(423, lockedResult.StatusCode);
-    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), false), Times.Never);
+    _authServiceMock.Verify(auth => auth.GenerateJwtToken(It.IsAny<string>(), It.IsAny<string>(), false), Times.Never);
   }
 }

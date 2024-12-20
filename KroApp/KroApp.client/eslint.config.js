@@ -52,8 +52,16 @@ export default [
         {
           ignoreWhenNoAttributes: true,
           ignoreWhenEmpty: true,
-          ignores: ["pre", "textarea", ...INLINE_ELEMENTS],
+          ignores: ["pre", "textarea"],
           externalIgnores: [],
+        },
+      ],
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+          allowTaggedTemplates: false,
         },
       ],
       "@typescript-eslint/no-explicit-any": "off",

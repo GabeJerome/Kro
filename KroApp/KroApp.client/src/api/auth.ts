@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 interface AuthResponse {
   message: string;
   token: string;
-  data: {};
+  data: { "": [] };
 }
 
 interface JwtPayload {
@@ -28,7 +28,7 @@ interface UserLogin {
 function isTokenExpired(token: string): boolean {
   const { exp } = jwtDecode<JwtPayload>(token);
   const currentTime = Math.floor(Date.now() / 1000);
-  return exp && exp > currentTime;
+  return (exp && exp > currentTime) as boolean;
 }
 
 function isAuthenticated() {
@@ -45,8 +45,10 @@ function isAuthenticated() {
 
 function getUsername(token: string): string | null {
   try {
-    const decoded = jwtDecode<JwtPayload & { sub?: string }>(token);
-    return decoded.sub || null;
+    const decoded = jwtDecode<JwtPayload & { given_name?: string }>(token);
+    console.log(decoded);
+    console.log(decoded.given_name);
+    return decoded.given_name || null;
   } catch (error) {
     console.error("Invalid JWT:", error);
     return null;
@@ -60,7 +62,7 @@ const registerUser = async (userData: UserRegister): Promise<AuthResponse> => {
       userData,
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     return error.response;
   }
 };
@@ -72,7 +74,7 @@ const loginUser = async (credentials: UserLogin): Promise<AuthResponse> => {
       credentials,
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     return error.response;
   }
 };
