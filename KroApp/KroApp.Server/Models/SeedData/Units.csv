@@ -1,0 +1,6 @@
+﻿Name,Abbreviation,ConversionFactorToBase,UnitType
+Gram,g,1,Weight
+Kilogram,kg,1000,Weight
+Milliliter,mL,1,Volume
+Liter,L,1000,Volume
+Piece,pc,1,Count
