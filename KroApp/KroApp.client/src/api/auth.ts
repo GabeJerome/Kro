@@ -28,15 +28,15 @@ interface UserLogin {
 function isTokenExpired(token: string): boolean {
   const { exp } = jwtDecode<JwtPayload>(token);
   const currentTime = Math.floor(Date.now() / 1000);
-  return (exp && exp > currentTime) as boolean;
+  return (!exp || exp < currentTime) as boolean;
 }
 
 function isAuthenticated() {
-  const token = localStorage.getItem("authToken");
+  const token = getToken();
   if (!token) return false;
 
   try {
-    return isTokenExpired(token);
+    return !isTokenExpired(token);
   } catch (error) {
     console.error("Invalid token:", error);
     return false;
@@ -46,8 +46,6 @@ function isAuthenticated() {
 function getUsername(token: string): string | null {
   try {
     const decoded = jwtDecode<JwtPayload & { given_name?: string }>(token);
-    console.log(decoded);
-    console.log(decoded.given_name);
     return decoded.given_name || null;
   } catch (error) {
     console.error("Invalid JWT:", error);
@@ -104,5 +102,6 @@ export default {
   isAuthenticated,
   getUsername,
   saveToken,
+  removeToken,
   getToken,
 };
