@@ -1,0 +1,4 @@
+﻿FdcId,UserId,IngredientId,DateAdded,Quantity,ExpirationDate,Location,Notes
+1001,UserId1,1,2023-11-20,2.5,2023-12-05,Fridge,Organic apples
+1002,UserId1,2,2023-11-18,1.0,2023-12-01,Pantry,Locally grown
+1003,UserId2,3,2023-11-17,3.0,2023-11-30,Freezer,Frozen chicken breast

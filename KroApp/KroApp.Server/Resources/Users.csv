@@ -1,0 +1,3 @@
+﻿UserName,Email,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount
+johndoe,john@example.com,JOHNDOE,JOHN@EXAMPLE.COM,True,hashedpassword,stamp1,concurrency1,1234567890,True,False,,True,0
+janedoe,jane@example.com,JANEDOE,JANE@EXAMPLE.COM,True,hashedpassword,stamp2,concurrency2,0987654321,True,False,,True,0

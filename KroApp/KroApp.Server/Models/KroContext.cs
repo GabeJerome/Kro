@@ -8,7 +8,7 @@ namespace KroApp.Server.Models
   public class KroContext : IdentityDbContext<User>
   {
     public KroContext(DbContextOptions<KroContext> options) : base(options) { }
-
-    public DbSet<Unit> Units { get; set; }
+    public DbSet<Ingredient> Ingredients { get; set; }
+    public DbSet<UserIngredient> UserIngredients { get; set; }
   }
 }
