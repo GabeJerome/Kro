@@ -65,4 +65,23 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        entryFileNames: "ts/[name].ts",
+        chunkFileNames: "ts/[name].ts",
+        assetFileNames: ({ name }) => {
+          if (/\.(gif|jpe?g|png|svg)$/.test(name ?? "")) {
+            return "img/[name].[ext]";
+          }
+          if (/\.css$/.test(name ?? "")) {
+            return "css/[name].[ext]";
+          }
+          return "[name].[ext]";
+        },
+      },
+    },
+  },
 });

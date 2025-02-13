@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { Toast } from "primevue";
-import DrawerMenu from "@/components/DrawerMenu.vue";
+import DrawerMenu from "@/Components/DrawerMenu.vue";
 
 onMounted(() => {
   const darkModePreference = sessionStorage.getItem("dark-mode");
