@@ -1,0 +1,3 @@
+﻿Id,UserName,Email,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount
+UserId1,johndoe,john@example.com,JOHNDOE,JOHN@EXAMPLE.COM,True,AQAAAAIAAYagAAAAEO9BxyFTY3TRS/fJTnQfgki3XshoE5zmXl/JYxW2X9fm37EzyflgXnw5njaK6tN8QA==,stamp1,concurrency1,1234567890,True,False,2024-02-06T15:30:00Z,True,0
+UserId2,janedoe,jane@example.com,JANEDOE,JANE@EXAMPLE.COM,True,AQAAAAIAAYagAAAAEO9BxyFTY3TRS/fJTnQfgki3XshoE5zmXl/JYxW2X9fm37EzyflgXnw5njaK6tN8QA==,stamp2,concurrency2,0987654321,True,False,2024-02-06T15:30:00Z,True,0

@@ -1,5 +1,5 @@
 {
-  "include": ["./src/**/*", "./env.d.ts"],
+  "include": ["./src/**/*", "./env.d.ts", "vite.config.ts"],
   "files": [],
   "references": [
     {
@@ -17,6 +17,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true
   }
 }

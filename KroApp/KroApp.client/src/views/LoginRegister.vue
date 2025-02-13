@@ -6,8 +6,7 @@
       </template>
       <template #content>
         <Form
-          v-slot="$form"
-          :resolver
+          :resolver="resolver"
           class="flex justify-center flex-col gap-4"
           @submit="onFormSubmit"
         >
@@ -24,12 +23,12 @@
               <label for="username-input"> Username </label>
             </FloatLabel>
             <Message
-              v-if="($form as any).username?.invalid"
+              v-if="formErrors.username"
               severity="error"
               size="small"
               variant="simple"
             >
-              {{ ($form as any).username.error?.message }}
+              {{ formErrors.username[0] }}
             </Message>
           </FormField>
           <FormField
@@ -47,12 +46,12 @@
               <label for="email-input"> Email </label>
             </FloatLabel>
             <Message
-              v-if="($form as any).email?.invalid"
+              v-if="formErrors.email"
               severity="error"
               size="small"
               variant="simple"
             >
-              {{ ($form as any).email.error?.message }}
+              {{ formErrors.email[0] }}
             </Message>
           </FormField>
 
@@ -66,28 +65,39 @@
                 type="password"
                 toggle-mask
                 fluid
+                :feedback="true"
+                feedback-tooltip
+                prompt-label="Enter a password"
               >
                 <template #footer>
-                  <p class="mt-2">Requires at least:</p>
-                  <ul class="pl-2 ml-2 mt-0">
-                    <li>6 characters</li>
-                    <li>1 lowercase letter</li>
-                    <li>1 uppercase letter</li>
-                    <li>1 number</li>
-                    <li>1 special character</li>
-                  </ul>
+                  <Message
+                    v-if="formErrors.password"
+                    severity="error"
+                    size="small"
+                    variant="simple"
+                  >
+                    <p class="mt-2">Still required:</p>
+                    <ul>
+                      <li
+                        v-for="error in formErrors.password"
+                        :key="error"
+                      >
+                        {{ error }}
+                      </li>
+                    </ul>
+                  </Message>
                 </template>
               </Password>
               <label for="password-input"> Password </label>
+              <Message
+                v-if="formErrors.password && submitAttempted"
+                severity="error"
+                size="small"
+                variant="simple"
+              >
+                Invalid Password
+              </Message>
             </FloatLabel>
-            <Message
-              v-if="($form as any).password?.invalid"
-              severity="error"
-              size="small"
-              variant="simple"
-            >
-              {{ ($form as any).password.error?.message }}
-            </Message>
           </FormField>
           <FormField v-if="isLogin">
             <Checkbox
@@ -117,12 +127,12 @@
               <label for="confirm-password-input"> Confirm Password </label>
             </FloatLabel>
             <Message
-              v-if="($form as any).confirmPassword?.invalid"
+              v-if="formErrors.confirmPassword"
               severity="error"
               size="small"
               variant="simple"
             >
-              {{ ($form as any).confirmPassword.error?.message }}
+              {{ formErrors.confirmPassword[0] }}
             </Message>
           </FormField>
 
@@ -132,7 +142,7 @@
           <Button
             :label="`${isLogin ? 'Register' : 'Login'}`"
             name="toggle-login-register"
-            variant="link"
+            variant="text"
             @click="toggleAuthMode"
           />
           <Button
@@ -158,8 +168,7 @@ import {
 } from "primevue";
 import { Form, FormField } from "@primevue/forms";
 import Checkbox from "primevue/checkbox";
-import { zodResolver } from "@primevue/forms/resolvers/zod";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import auth from "@/api/auth";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
@@ -167,45 +176,81 @@ import { onMounted } from "vue";
 
 const router = useRouter();
 const toast = useToast();
-const username = ref("");
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
-const rememberMe = ref(false);
+const username = ref<string>("");
+const email = ref<string>("");
+const password = ref<string>("");
+const confirmPassword = ref<string>("");
+const rememberMe = ref<boolean>(false);
 const isLogin = ref(true);
+const formErrors = ref<Record<string, string[]>>({});
+const submitAttempted = ref<boolean>(false);
 
-const resolver = ref(
-  zodResolver(
-    z
-      .object({
-        username: isLogin.value
-          ? z.string().optional()
-          : z.string().min(1, { message: "Username is required." }),
-        email: z
-          .string()
-          .min(1, { message: "Email is required." })
-          .email({ message: "Invalid email address." }),
-        password: z
-          .string()
-          .min(6, { message: "Password must be at least 6 characters long." })
-          .regex(/[a-z]/, {
-            message: "Password must contain at least one lowercase letter.",
-          })
-          .regex(/[A-Z]/, {
-            message: "Password must contain at least one uppercase letter.",
-          })
-          .regex(/\d/, { message: "Password must contain at least one digit." })
-          .regex(/[^a-zA-Z0-9]/, {
-            message: "Password must contain at least one special character.",
-          }),
-        confirmPassword: z.string(),
-      })
-      .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords don't match",
-        path: ["confirmPassword"],
+const schema = z
+  .object({
+    username: z.string().min(1, { message: "Username is required." }),
+    email: z
+      .string()
+      .min(1, { message: "Email is required." })
+      .email({ message: "Invalid email address." })
+      .optional()
+      .refine((value) => isLogin.value || value, {
+        message: "Email is required.",
       }),
-  ),
-);
+    password: z
+      .string()
+      .min(6, { message: "Must be at least 6 characters long." })
+      .regex(/[a-z]/, {
+        message: "Must contain at least one lowercase letter.",
+      })
+      .regex(/[A-Z]/, {
+        message: "Must contain at least one uppercase letter.",
+      })
+      .regex(/\d/, { message: "Must contain at least one digit." })
+      .regex(/[^a-zA-Z0-9]/, {
+        message: "Must contain at least one special character.",
+      }),
+    confirmPassword: z
+      .string()
+      .optional()
+      .refine((value) => isLogin.value || value, {
+        message: "Please confirm your password.",
+      }),
+  })
+  .refine((data) => isLogin.value || data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+const resolver = (data: Record<string, any>) => {
+  try {
+    const formData = {
+      username: data.values.username || "",
+      email: isLogin.value ? undefined : data.values.email || "",
+      password: data.values.password || "",
+      confirmPassword: isLogin.value
+        ? undefined
+        : data.values.confirmPassword || "",
+    };
+
+    schema.parse(formData);
+    formErrors.value = {};
+    return { values: data, errors: {} };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      formErrors.value = error.errors.reduce(
+        (accumulator, current) => {
+          if (!accumulator[current.path[0]]) {
+            accumulator[current.path[0]] = [];
+          }
+          accumulator[current.path[0]].push(current.message);
+          return accumulator;
+        },
+        {} as Record<string, string[]>,
+      );
+    }
+    return { values: {}, errors: formErrors.value };
+  }
+};
 
 onMounted(() => {
   if (auth.isAuthenticated()) {
@@ -213,19 +258,31 @@ onMounted(() => {
   }
 });
 
-const onFormSubmit = async (form: any) => {
-  let success = false;
+const onFormSubmit = async () => {
+  submitAttempted.value = true;
+  const formData = {
+    username: username.value,
+    email: isLogin.value ? undefined : email.value,
+    password: password.value,
+    confirmPassword: isLogin.value ? undefined : confirmPassword.value,
+  };
 
-  if (form.valid) {
+  const { errors } = resolver({ values: formData });
+
+  if (Object.keys(errors).length === 0) {
+    let success = false;
+
     if (isLogin.value) {
       success = await handleLogin();
     } else {
       success = await handleRegister();
     }
-  }
 
-  if (success) {
-    router.push({ name: "User Home" });
+    if (success) {
+      router.push({ name: "User Home" });
+    }
+  } else {
+    console.log("Form validation errors:", errors);
   }
 };
 
@@ -238,6 +295,7 @@ async function handleLogin() {
     username: username.value,
     password: password.value,
   });
+
   if (response?.token) {
     auth.saveToken(response.token);
     toast.add({
@@ -265,6 +323,7 @@ async function handleRegister() {
     password: password.value,
     confirmPassword: confirmPassword.value,
   });
+
   if (response?.token) {
     auth.saveToken(response.token);
     toast.add({

@@ -1,10 +1,12 @@
 using KroApp.Server.Models;
+using KroApp.Server.Models.SeedData;
 using KroApp.Server.Models.Users;
 using KroApp.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +70,13 @@ builder.Services.AddAuthentication(x =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+  var services = scope.ServiceProvider;
+
+  SeedDatabase.Initialize(services, Assembly.GetExecutingAssembly());
+}
 
 app.UseCors("AllowFrontend");
 

@@ -16,9 +16,10 @@ const handleError = (error: any) => {
 
 apiClient.interceptors.request.use((config) => {
   const token = auth.getToken();
-  if (token && !auth.isTokenExpired(token)) {
+  if (token && auth.isAuthenticated()) {
     config.headers["Authorization"] = `Bearer ${token}`;
   } else {
+    auth.removeToken();
     auth.logout();
   }
   return config;

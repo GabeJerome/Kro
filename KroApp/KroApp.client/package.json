@@ -7,11 +7,14 @@
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build --force",
+    "build-only": "vite build --config vite.config.ts",
+    "type-check": "vue-tsc --build --force && rm -rf vite.config.js",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "clean": "rm -rf ../KroApp.Server/wwwroot/*",
+    "copy-static": "copyfiles -u 1 dist/**/* ../KroApp.Server/wwwroot",
+    "build-and-copy-static": "npm run clean && npm run build && npm run copy-static"
   },
   "lint-staged": {
     "*.{js,ts,vue}": [
@@ -22,13 +25,14 @@
     "@fortawesome/fontawesome-free": "^6.7.1",
     "@primevue/forms": "^4.2.1",
     "@primevue/themes": "^4.1.0",
+    "@vee-validate/zod": "^4.15.0",
     "axios": "^1.7.7",
     "jwt-decode": "^4.0.0",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.1",
     "vue": "^3.4.29",
     "vue-router": "^4.4.5",
-    "zod": "^3.23.8"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
@@ -39,6 +43,7 @@
     "@typescript-eslint/parser": "^8.6.0",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/tsconfig": "^0.5.1",
+    "copyfiles": "^2.4.1",
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
