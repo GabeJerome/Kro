@@ -7,8 +7,8 @@ using IdentitySignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
-using KroApp.Server.Services;
 using Microsoft.Extensions.Configuration;
+using KroApp.Server.Services.Auth;
 
 public class AccountControllerTests
 {

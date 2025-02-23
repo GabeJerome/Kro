@@ -4,19 +4,21 @@
       {{ username }}
     </div>
     <TabMenu :model="items" />
-  </div>
-  <div id="ingredient-list">This is the ingredient list</div>
-  <div
-    id="recipe-list"
-    style="display: none"
-  >
-    This is the recipe list
-  </div>
-  <div
-    id="grocery-list"
-    style="display: none"
-  >
-    This is the grocery list
+    <div id="ingredient-window">
+      <IngredientWindow />
+    </div>
+    <div
+      id="recipe-window"
+      style="display: none"
+    >
+      This is the recipe window
+    </div>
+    <div
+      id="grocery-window"
+      style="display: none"
+    >
+      This is the grocery window
+    </div>
   </div>
 </template>
 
@@ -25,8 +27,9 @@ import { ref } from "vue";
 import { TabMenu } from "primevue";
 import { onMounted } from "vue";
 import auth from "@/api/auth";
+import IngredientWindow from "./IngredientWindow.vue";
 
-const username = ref("");
+const username = ref<string>("");
 
 const items = ref([
   {
@@ -47,22 +50,22 @@ onMounted(() => {
 });
 
 function switchToIngredients() {
-  document.getElementById("recipe-list")!.style.display = "none";
-  document.getElementById("grocery-list")!.style.display = "none";
+  document.getElementById("recipe-window")!.style.display = "none";
+  document.getElementById("grocery-window")!.style.display = "none";
 
-  document.getElementById("ingredient-list")!.style.display = "block";
+  document.getElementById("ingredient-window")!.style.display = "block";
 }
 function switchToRecipes() {
-  document.getElementById("ingredient-list")!.style.display = "none";
-  document.getElementById("grocery-list")!.style.display = "none";
+  document.getElementById("ingredient-window")!.style.display = "none";
+  document.getElementById("grocery-window")!.style.display = "none";
 
-  document.getElementById("recipe-list")!.style.display = "block";
+  document.getElementById("recipe-window")!.style.display = "block";
 }
 function switchToGroceries() {
-  document.getElementById("ingredient-list")!.style.display = "none";
-  document.getElementById("recipe-list")!.style.display = "none";
+  document.getElementById("ingredient-window")!.style.display = "none";
+  document.getElementById("recipe-window")!.style.display = "none";
 
-  document.getElementById("grocery-list")!.style.display = "block";
+  document.getElementById("grocery-window")!.style.display = "block";
 }
 </script>
 

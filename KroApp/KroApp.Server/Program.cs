@@ -1,10 +1,14 @@
+using KroApp.Server.Clients;
 using KroApp.Server.Models;
 using KroApp.Server.Models.SeedData;
 using KroApp.Server.Models.Users;
 using KroApp.Server.Services;
+using KroApp.Server.Services.Auth;
+using KroApp.Server.Services.Ingredients;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
@@ -37,8 +41,12 @@ builder.Services.AddCors(options =>
   });
 });
 
+// Register USDA API client
+builder.Services.AddHttpClient<IUsdaApiClient, UsdaApiClient>();
+
 // Register other services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IIngredientsService, IngredientsService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

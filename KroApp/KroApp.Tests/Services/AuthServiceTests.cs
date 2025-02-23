@@ -8,8 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using Moq;
 using Xunit;
 using KroApp.Server.Models.Users;
-using KroApp.Server.Services;
 using Microsoft.AspNetCore.Http;
+using KroApp.Server.Services;
 
 public class AuthServiceTests
 {

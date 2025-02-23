@@ -1,6 +1,5 @@
 ﻿using KroApp.Server.Models.Users;
-using KroApp.Server.Services;
-using Microsoft.AspNetCore.Identity;
+using KroApp.Server.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KroApp.Server.Controllers
@@ -29,7 +28,7 @@ namespace KroApp.Server.Controllers
         ModelState.AddModelError(string.Empty, "An account with this username already exists.");
         return BadRequest(ModelState);
       }
-      
+
       if (await _authService.UserExists(model.Email))
       {
         ModelState.AddModelError(string.Empty, "An account with this email already exists.");
@@ -74,7 +73,8 @@ namespace KroApp.Server.Controllers
       }
 
       var user = await _authService.GetUser(model.Username);
-      if (user == null) {
+      if (user == null)
+      {
         return StatusCode(500, new { Message = "Server encountered an internal error with your account." });
       }
 
