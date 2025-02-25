@@ -24,5 +24,6 @@ onMounted(() => {
 <style scoped>
 .page-content {
   margin: 0 3rem 0 3rem;
+  height: 100%;
 }
 </style>

@@ -1,19 +1,21 @@
 <template>
-  <FloatLabel variant="on">
-    <InputText
-      id="search-input"
-      v-model="searchString"
-      type="text"
-      name="search-input"
-      class="p-mb-3"
+  <div class="card">
+    <FloatLabel variant="on">
+      <InputText
+        id="search-input"
+        v-model="searchString"
+        type="text"
+        name="search-input"
+        class="p-mb-3"
+      />
+      <label for="search-input"> Search </label>
+    </FloatLabel>
+    <Button
+      label="List Ingredients"
+      name="list-ingredients"
+      @click="submitSearch"
     />
-    <label for="search-input"> Search </label>
-  </FloatLabel>
-  <Button
-    label="List Ingredients"
-    name="list-ingredients"
-    @click="submitSearch"
-  />
+  </div>
 </template>
 
 <script setup lang="ts">

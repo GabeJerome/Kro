@@ -1,16 +1,25 @@
 :root {
   --body-bg: linear-gradient(
+    to top,
+    rgb(233, 213, 255) 0%,
+    rgb(244, 234, 255) 100%
+  );
+  --card-bg: linear-gradient(
     to bottom,
     rgb(233, 213, 255) 0%,
-    rgb(255, 255, 255) 100%
+    rgb(244, 234, 255) 100%
   );
+  --secondary-bg: rgb(220, 197, 255);
+  --third-bg: rgb(212, 171, 255);
 }
 
 :root[class="dark-mode"] {
-  --body-bg: linear-gradient(
+  --body-bg: linear-gradient(to top, rgb(52, 8, 99) 0%, rgb(95, 9, 214) 100%);
+  --card-bg: linear-gradient(
     to bottom,
-    rgb(17, 0, 35) 0%,
-    rgb(63, 0, 151) 100%
+    rgb(78, 0, 162) 0%,
+    rgb(92, 7, 210) 100%
   );
+  --secondary-bg: rgb(109, 40, 215);
+  --third-bg: rgb(79, 0, 197);
 }
-
