@@ -11,7 +11,7 @@ import Tooltip from "primevue/tooltip";
 
 const app = createApp(App);
 
-const customViolet = {
+const customVioletLight = {
   50: "{violet.50}",
   100: "{violet.100}",
   200: "{violet.200}",
@@ -25,32 +25,41 @@ const customViolet = {
   950: "{violet.950}",
 };
 
+const customVioletDark = {
+  50: "#F8F3FF",
+  100: "#EDE4FF",
+  200: "#D6C7FF",
+  300: "#BEA6F5",
+  400: "#A48AE2",
+  500: "#8E6EDB",
+  600: "#7D56D8",
+  700: "#744FCC",
+  800: "#6F50CF",
+  900: "#6546C5",
+  950: "#573BB4",
+};
 const MyPreset = definePreset(Lara, {
   semantic: {
-    primary: customViolet,
+    primary: customVioletLight,
     colorScheme: {
       light: {
         formField: {
+          background: customVioletLight[50],
           hoverBorderColor: "{surface.color}",
         },
-        surface: customViolet,
+        surface: customVioletLight,
+        text: {
+          color: customVioletLight[500],
+        },
       },
       dark: {
         formField: {
+          background: customVioletDark[800],
           hoverBorderColor: "{surface.color}",
         },
-        surface: {
-          50: "{purple.50}",
-          100: "{purple.100}",
-          200: "{purple.200}",
-          300: "{purple.300}",
-          400: "{purple.400}",
-          500: "{purple.500}",
-          600: "{purple.600}",
-          700: "{purple.700}",
-          800: "{purple.800}",
-          900: "{purple.900}",
-          950: "{purple.950}",
+        surface: customVioletDark,
+        text: {
+          color: customVioletDark[200],
         },
       },
     },

@@ -85,22 +85,34 @@ onMounted(() => {
 .my-tab-buttons > button {
   border-radius: 8px 8px 0px 0px;
   background-color: var(--secondary-bg);
+  box-shadow:
+    inset 0 5px 5px -5px rgba(0, 0, 0, 0.2),
+    inset -5px 0 5px -5px rgba(0, 0, 0, 0.2),
+    inset 5px 0 5px -5px rgba(0, 0, 0, 0.2);
+  border-top: none;
+  color: var(--text-color);
+}
+
+.p-tab:not(.p-tab-active):not(.p-disabled):hover {
+  color: var(--text-color);
 }
 
 .my-tab-buttons > .p-tab-active {
   background: linear-gradient(
     to bottom,
-    var(--third-bg) 40%,
+    var(--third-bg) 55%,
     var(--secondary-bg) 100%
   );
   border-color: var(--p-tabs-tab-active-border-color);
-  color: var(--p-tabs-tab-active-color);
-  border-top-width: 3px;
+  border-top: solid 3px var(--p-tabs-tab-active-border-color);
+  box-shadow: none;
 }
 
 .tab-panels {
   flex-grow: 1;
   border-top-left-radius: 0;
   background-color: var(--secondary-bg);
+  border-top: none;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 </style>

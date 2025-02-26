@@ -1,6 +1,28 @@
 <template>
   <div class="login-card-container">
-    <Card class="card">
+    <Card
+      class="card"
+      :pt="{
+        root: {
+          style: {
+            backgroundColor: 'var(--secondary-bg)',
+          },
+        },
+        title: {
+          style: {
+            textAlign: 'center',
+            fontSize: '1.5rem',
+          },
+        },
+        content: {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          },
+        },
+      }"
+    >
       <template #title>
         <h2>{{ isLogin ? "Login" : "Register" }}</h2>
       </template>
@@ -142,12 +164,11 @@
           <Button
             :label="`${isLogin ? 'Register' : 'Login'}`"
             name="toggle-login-register"
-            variant="text"
+            variant="link"
             @click="toggleAuthMode"
           />
           <Button
             type="submit"
-            severity="secondary"
             label="Submit"
           />
         </Form>

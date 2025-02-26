@@ -11,15 +11,21 @@
   );
   --secondary-bg: rgb(220, 197, 255);
   --third-bg: rgb(212, 171, 255);
+  --text-color: var(--p-primary-500);
 }
 
 :root[class="dark-mode"] {
-  --body-bg: linear-gradient(to top, rgb(52, 8, 99) 0%, rgb(95, 9, 214) 100%);
+  --body-bg: linear-gradient(
+    to bottom,
+    rgb(105, 105, 105) 0%,
+    rgb(80, 80, 80) 100%
+  );
   --card-bg: linear-gradient(
     to bottom,
-    rgb(78, 0, 162) 0%,
+    rgb(87, 52, 126) 0%,
     rgb(92, 7, 210) 100%
   );
-  --secondary-bg: rgb(109, 40, 215);
-  --third-bg: rgb(79, 0, 197);
+  --secondary-bg: rgb(142, 110, 219);
+  --third-bg: rgb(107, 43, 202);
+  --text-color: var(--p-primary-200);
 }
