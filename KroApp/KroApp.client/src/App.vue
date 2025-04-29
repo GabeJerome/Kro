@@ -14,7 +14,7 @@ import { Toast } from "primevue";
 import DrawerMenu from "@/Components/DrawerMenu.vue";
 
 onMounted(() => {
-  const darkModePreference = sessionStorage.getItem("dark-mode");
+  const darkModePreference = localStorage.getItem("dark-mode");
   if (darkModePreference === "enabled") {
     document.documentElement.classList.add("dark-mode");
   }

@@ -1,31 +1,51 @@
 :root {
-  --body-bg: linear-gradient(
-    to top,
-    rgb(233, 213, 255) 0%,
-    rgb(244, 234, 255) 100%
+  /* Background tokens */
+  --background-page: radial-gradient(
+    circle at 50% 15%,
+    var(--p-surface-100) 0%,
+    var(--p-surface-300) 100%
   );
-  --card-bg: linear-gradient(
-    to bottom,
-    rgb(233, 213, 255) 0%,
-    rgb(244, 234, 255) 100%
+  --background-secondary: radial-gradient(
+    circle at 40% 75%,
+    var(--background-tertiary) 15%,
+    var(--p-surface-400) 100%
   );
-  --secondary-bg: rgb(220, 197, 255);
-  --third-bg: rgb(212, 171, 255);
-  --text-color: var(--p-primary-500);
+  --background-tertiary: var(--p-surface-300);
+  --background-accent: var(--p-accent-100);
+
+  /* Text tokens */
+  --text-primary: var(--p-primary-500);
+  --text-secondary: var(--p-primary-700);
+  --text-input: var(--p-primary-900);
+
+  /* Border tokens */
+  --border-default: var(--p-surface-300);
+  --border-focus: var(--p-primary-500);
 }
 
 :root[class="dark-mode"] {
-  --body-bg: linear-gradient(
-    to bottom,
-    rgb(105, 105, 105) 0%,
-    rgb(80, 80, 80) 100%
+  /* Background tokens */
+  --background-page: radial-gradient(
+    circle at 50% 15%,
+    var(--p-surface-900) 15%,
+    var(--p-surface-300) 100%
   );
-  --card-bg: linear-gradient(
-    to bottom,
-    rgb(87, 52, 126) 0%,
-    rgb(92, 7, 210) 100%
+  --background-secondary: radial-gradient(
+    circle at 40% 75%,
+    var(--p-surface-700) 15%,
+    var(--background-tertiary) 100%
   );
-  --secondary-bg: rgb(142, 110, 219);
-  --third-bg: rgb(107, 43, 202);
-  --text-color: var(--p-primary-200);
+  --background-tertiary: var(--p-surface-300);
+  --background-accent: var(--p-accent-500);
+
+  /* Text tokens */
+  --text-primary: var(--p-primary-50);
+  --text-secondary: var(--p-primary-200);
+  --text-input: var(--p-primary-100);
+  --text-accent: var(--p-primary-400);
+
+  /* Border tokens */
+  --border-default: var(--p-surface-400);
+  --border-focus: var(--p-primary-600);
+  --border-accent: var(--p-accent-500);
 }

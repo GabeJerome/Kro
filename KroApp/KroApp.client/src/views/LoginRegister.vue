@@ -1,24 +1,11 @@
 <template>
   <div class="login-card-container">
     <Card
-      class="card"
+      class="login-card"
       :pt="{
-        root: {
-          style: {
-            backgroundColor: 'var(--secondary-bg)',
-          },
-        },
         title: {
           style: {
             textAlign: 'center',
-            fontSize: '1.5rem',
-          },
-        },
-        content: {
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
           },
         },
       }"
@@ -98,11 +85,12 @@
                     size="small"
                     variant="simple"
                   >
-                    <p class="mt-2">Still required:</p>
+                    <p class="mt-2 text-primary">Still required:</p>
                     <ul>
                       <li
                         v-for="error in formErrors.password"
                         :key="error"
+                        class="text-primary"
                       >
                         {{ error }}
                       </li>
@@ -373,13 +361,16 @@ async function handleRegister() {
   padding: 2rem;
 }
 
+.login-card {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+}
+
 .form-field {
   margin-bottom: 0.5rem;
 }
 
-.p-tooltip {
-  width: fit-content;
-  font-size: 0.9rem;
-  line-height: 1.4;
+.text-primary {
+  color: var(--text-primary);
 }
 </style>

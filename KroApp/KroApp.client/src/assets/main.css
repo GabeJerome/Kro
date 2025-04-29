@@ -6,7 +6,7 @@ html {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   padding: 1rem;
-  background: var(--body-bg);
+  background: var(--background-page);
   height: 100%;
   width: 100%;
 }
@@ -36,12 +36,4 @@ main {
     width: 100%;
     padding: 1rem;
   }
-}
-
-.card {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  background: var(--card-bg);
-  padding: 2rem;
 }

@@ -3,63 +3,49 @@ import "./assets/main.css";
 import { createApp } from "vue";
 import App from "./App.vue";
 import PrimeVue from "primevue/config";
-import Lara from "@primevue/themes/lara";
+import Aura from "@primevue/themes/aura";
 import { definePreset } from "@primevue/themes";
 import ToastService from "primevue/toastservice";
 import router from "@/router";
 import Tooltip from "primevue/tooltip";
+import "@/assets/colors";
+import { darkTheme, lightTheme } from "@/assets/colors";
 
 const app = createApp(App);
 
-const customVioletLight = {
-  50: "{violet.50}",
-  100: "{violet.100}",
-  200: "{violet.200}",
-  300: "{violet.300}",
-  400: "{violet.400}",
-  500: "{violet.500}",
-  600: "{violet.600}",
-  700: "{violet.700}",
-  800: "{violet.800}",
-  900: "{violet.900}",
-  950: "{violet.950}",
-};
-
-const customVioletDark = {
-  50: "#F8F3FF",
-  100: "#EDE4FF",
-  200: "#D6C7FF",
-  300: "#BEA6F5",
-  400: "#A48AE2",
-  500: "#8E6EDB",
-  600: "#7D56D8",
-  700: "#744FCC",
-  800: "#6F50CF",
-  900: "#6546C5",
-  950: "#573BB4",
-};
-const MyPreset = definePreset(Lara, {
+const MyPreset = definePreset(Aura, {
   semantic: {
-    primary: customVioletLight,
     colorScheme: {
       light: {
-        formField: {
-          background: customVioletLight[50],
-          hoverBorderColor: "{surface.color}",
-        },
-        surface: customVioletLight,
-        text: {
-          color: customVioletLight[500],
-        },
+        surface: lightTheme.surface,
+        primary: lightTheme.primary,
+        accent: lightTheme.accent,
       },
       dark: {
-        formField: {
-          background: customVioletDark[800],
-          hoverBorderColor: "{surface.color}",
+        surface: darkTheme.surface,
+        primary: darkTheme.primary,
+        accent: darkTheme.accent,
+      },
+    },
+  },
+  components: {
+    card: {
+      root: {
+        borderRadius: "0.5rem",
+      },
+      title: {
+        fontSize: "1.5rem",
+      },
+      colorScheme: {
+        light: {
+          root: {
+            background: "var(--background-secondary)",
+          },
         },
-        surface: customVioletDark,
-        text: {
-          color: customVioletDark[200],
+        dark: {
+          root: {
+            background: "var(--background-secondary)",
+          },
         },
       },
     },

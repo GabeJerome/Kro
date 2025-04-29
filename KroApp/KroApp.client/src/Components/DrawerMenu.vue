@@ -1,7 +1,6 @@
 <template>
   <Drawer
     v-model:visible="visible"
-    class="menu"
     :modal="true"
     :dismissible="true"
   >
@@ -54,11 +53,6 @@ function toggleDarkMode() {
 </script>
 
 <style scoped>
-.menu {
-  width: 250px;
-  background-color: var(--p-surface-200);
-}
-
 .drawer-content {
   display: flex;
   flex-direction: column;
