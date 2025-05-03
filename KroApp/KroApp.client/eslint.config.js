@@ -35,27 +35,6 @@ export default [
         "error",
         { tabWidth: 2, endOfLine: "crlf", singleAttributePerLine: true },
       ],
-      "vue/max-attributes-per-line": [
-        "error",
-        {
-          singleline: {
-            max: 1,
-          },
-          multiline: {
-            max: 1,
-          },
-        },
-      ],
-      indent: ["error", 2],
-      "vue/singleline-html-element-content-newline": [
-        "error",
-        {
-          ignoreWhenNoAttributes: true,
-          ignoreWhenEmpty: true,
-          ignores: ["pre", "textarea"],
-          externalIgnores: [],
-        },
-      ],
       "@typescript-eslint/no-unused-expressions": [
         "error",
         {
@@ -75,8 +54,11 @@ export default [
   },
   {
     files: ["**/*.test.js", "**/*.spec.js"], // Test files
-    env: {
-      jest: true,
+    languageOptions: {
+      globals: {
+        ...globals.jest, // or globals.mocha, etc.
+      },
     },
   },
+  eslintConfigPrettier,
 ];
