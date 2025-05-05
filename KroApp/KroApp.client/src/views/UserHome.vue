@@ -78,6 +78,12 @@ onMounted(() => {
   border-radius: 12px;
 }
 
+.p-tabs {
+  height: 100%;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
 .my-tablist {
   width: fit-content;
 }
@@ -106,9 +112,13 @@ onMounted(() => {
 
 .tab-panels {
   flex-grow: 1;
-  border-top-left-radius: 0;
   background: var(--background-secondary);
   border-top: none;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+
+.tab-panels > * {
+  height: calc(100% - 2rem);
 }
 </style>

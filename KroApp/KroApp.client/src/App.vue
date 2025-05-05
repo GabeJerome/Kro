@@ -1,5 +1,5 @@
 <template>
-  <main class="tablet-width mobile-medium-width mobile-full-width">
+  <main>
     <DrawerMenu />
     <div class="page-content">
       <RouterView />
@@ -23,7 +23,6 @@ onMounted(() => {
 
 <style scoped>
 .page-content {
-  margin: 0 3rem 0 3rem;
   height: 100%;
 }
 </style>

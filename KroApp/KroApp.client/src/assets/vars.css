@@ -19,8 +19,9 @@
   --text-input: var(--p-primary-900);
 
   /* Border tokens */
-  --border-default: var(--p-surface-300);
+  --border-default: var(--p-surface-500);
   --border-focus: var(--p-primary-500);
+  --border-accent: var(--p-accent-500);
 }
 
 :root[class="dark-mode"] {
@@ -45,7 +46,7 @@
   --text-accent: var(--p-primary-400);
 
   /* Border tokens */
-  --border-default: var(--p-surface-400);
+  --border-default: var(--p-surface-300);
   --border-focus: var(--p-primary-600);
   --border-accent: var(--p-accent-500);
 }

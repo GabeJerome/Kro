@@ -1,39 +1,60 @@
-@import "./vars.css";
+@import "@/assets/vars.css";
 @import "primeicons/primeicons.css";
 @import "@fortawesome/fontawesome-free/css/all.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  padding: 1rem;
-  background: var(--background-page);
   height: 100%;
-  width: 100%;
 }
 
-body,
-#app,
+body {
+  height: 100%;
+  background: var(--background-page);
+  margin: 0;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 main {
+  flex-grow: 1;
   height: 100%;
 }
 
 @media (max-width: 480px) {
-  .mobile-full-width {
-    width: 100%;
-    padding: 0rem;
+  main {
+    margin-top: 3.5rem;
+  }
+
+  .title-bar {
+    text-align: center;
   }
 }
 
-@media (max-width: 576px) {
-  .mobile-medium-width {
-    width: 100%;
-    padding: 0.5rem;
+@media (min-width: 481px) and (max-width: 767px) {
+  main {
+    margin: 3rem 2rem;
+  }
+
+  .title-bar {
+    text-align: center;
   }
 }
 
-@media (max-width: 768px) {
-  .tablet-width {
-    width: 100%;
-    padding: 1rem;
+@media (min-width: 768px) {
+  main {
+    margin: 3rem;
   }
 }

@@ -2,13 +2,7 @@
   <div class="login-card-container">
     <Card
       class="login-card"
-      :pt="{
-        title: {
-          style: {
-            textAlign: 'center',
-          },
-        },
-      }"
+      :pt="{ title: { style: { textAlign: 'center' } } }"
     >
       <template #title>
         <h2>{{ isLogin ? "Login" : "Register" }}</h2>
