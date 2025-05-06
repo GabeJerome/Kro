@@ -36,8 +36,8 @@ const showSearch = ref<boolean>(false);
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
-  width: 100%;
-  height: 100%;
+  height: calc(100% - 0.5rem);
+  padding: 0.25rem;
   overflow: hidden;
 }
 

@@ -51,7 +51,7 @@
       v-if="ingredients && ingredients.length > 0 && !loading"
       class="results-container"
     >
-      <h3 class="results-title">Search Results for "{{ lastSearchTerm }}"</h3>
+      <h3>Search Results for "{{ lastSearchTerm }}"</h3>
       <DataTable
         :value="ingredients"
         paginator
@@ -195,10 +195,6 @@ const submitSearch = async () => {
 
 .message-container > span {
   margin-right: 0.5rem;
-}
-
-.results-title {
-  font-size: 1.25rem;
 }
 
 .results-container {

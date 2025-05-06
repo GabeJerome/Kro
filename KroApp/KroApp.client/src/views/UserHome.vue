@@ -15,12 +15,8 @@
         pt:tablist:class="my-tab-buttons"
         :pt="{
           tablist: {
-            style: {
-              background: 'transparent',
-            },
-            class: {
-              'p-tab-active': 'my-tab-active',
-            },
+            style: { background: 'transparent' },
+            class: { 'p-tab-active': 'my-tab-active' },
           },
         }"
       >
@@ -82,6 +78,7 @@ onMounted(() => {
   height: 100%;
   overflow-y: auto;
   border-radius: 8px;
+  flex-basis: 0;
 }
 
 .my-tablist {
